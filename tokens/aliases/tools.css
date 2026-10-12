@@ -1,0 +1,13 @@
+/* Alias sheet: octopus-tools (public/styles/main.css). */
+:root {
+  --bg: var(--o-bg);
+  --bg-2: var(--o-surface);
+  --bg-3: var(--o-surface-2);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --text-muted: var(--o-muted);
+  --accent: var(--o-accent);
+  --accent-hover: var(--o-accent-hover);
+  --radius: var(--o-radius-md);
+  --header-height: 60px;
+}

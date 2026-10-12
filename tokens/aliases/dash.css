@@ -1,0 +1,15 @@
+/* Alias sheet: octopus-dash (public/index.html inline :root). --green / --yellow / --red are
+   status colours (up / degraded / down), so they map to success / warn / danger, never to
+   the accent. --tailscale is a fixed network-brand hue. */
+:root {
+  --bg: var(--o-bg);
+  --surface: var(--o-surface);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --muted: var(--o-muted);
+  --accent: var(--o-accent);
+  --green: var(--o-success);
+  --yellow: var(--o-warn);
+  --red: var(--o-danger);
+  --tailscale: light-dark(#2b7a99, #7ec8e3);
+}

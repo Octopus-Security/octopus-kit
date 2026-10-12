@@ -1,0 +1,301 @@
+{
+ "budget": {
+  "name": "Budget",
+  "dark": {
+   "accent": "#42aa65",
+   "hover": "#5ac07a",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#237626",
+   "hover": "#01610d",
+   "ink": "#ffffff"
+  }
+ },
+ "health": {
+  "name": "Health",
+  "dark": {
+   "accent": "#28a1c0",
+   "hover": "#46b7d7",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#046d8c",
+   "hover": "#055871",
+   "ink": "#ffffff"
+  }
+ },
+ "planner": {
+  "name": "Planner",
+  "dark": {
+   "accent": "#7aa2f7",
+   "hover": "#99bafd",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#4f4dcc",
+   "hover": "#3e36b4",
+   "ink": "#ffffff"
+  }
+ },
+ "pass": {
+  "name": "Passwords",
+  "dark": {
+   "accent": "#9e9077",
+   "hover": "#b4a58c",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#7a6d5c",
+   "hover": "#665949",
+   "ink": "#ffffff"
+  }
+ },
+ "xmpp": {
+  "name": "Messenger",
+  "dark": {
+   "accent": "#8bccfd",
+   "hover": "#b9e0ff",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#0165af",
+   "hover": "#03518e",
+   "ink": "#ffffff"
+  }
+ },
+ "cortex": {
+  "name": "Cortex",
+  "dark": {
+   "accent": "#c96442",
+   "hover": "#e17a57",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#ac5442",
+   "hover": "#953f2e",
+   "ink": "#ffffff"
+  }
+ },
+ "shopper": {
+  "name": "Shopper",
+  "dark": {
+   "accent": "#9db240",
+   "hover": "#b3c958",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#5a6c00",
+   "hover": "#485702",
+   "ink": "#ffffff"
+  }
+ },
+ "kitchen": {
+  "name": "Kitchen",
+  "dark": {
+   "accent": "#ff8a5b",
+   "hover": "#ffaf90",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#aa5910",
+   "hover": "#8e4808",
+   "ink": "#ffffff"
+  }
+ },
+ "ee": {
+  "name": "Electronics",
+  "dark": {
+   "accent": "#c48b00",
+   "hover": "#dba12f",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#865802",
+   "hover": "#6c4703",
+   "ink": "#ffffff"
+  }
+ },
+ "media": {
+  "name": "Media",
+  "dark": {
+   "accent": "#d0ca52",
+   "hover": "#e7e16a",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#7e6f00",
+   "hover": "#675b06",
+   "ink": "#ffffff"
+  }
+ },
+ "edm": {
+  "name": "EDM",
+  "dark": {
+   "accent": "#bd71c0",
+   "hover": "#d486d7",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#8e4087",
+   "hover": "#782b72",
+   "ink": "#ffffff"
+  }
+ },
+ "mma": {
+  "name": "MMA",
+  "dark": {
+   "accent": "#e5484d",
+   "hover": "#fe6062",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#b4144e",
+   "hover": "#94073e",
+   "ink": "#ffffff"
+  }
+ },
+ "games": {
+  "name": "Games",
+  "dark": {
+   "accent": "#c3baff",
+   "hover": "#dad5ff",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#63569e",
+   "hover": "#504288",
+   "ink": "#ffffff"
+  }
+ },
+ "math": {
+  "name": "Math",
+  "dark": {
+   "accent": "#20bcf1",
+   "hover": "#64d1fe",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#0176a8",
+   "hover": "#07618a",
+   "ink": "#ffffff"
+  }
+ },
+ "science": {
+  "name": "Science",
+  "dark": {
+   "accent": "#05dfe7",
+   "hover": "#42f7fe",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#0e7b82",
+   "hover": "#04656b",
+   "ink": "#ffffff"
+  }
+ },
+ "tools": {
+  "name": "Tools",
+  "dark": {
+   "accent": "#dd9231",
+   "hover": "#f5a84b",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#936621",
+   "hover": "#7e5200",
+   "ink": "#ffffff"
+  }
+ },
+ "blog": {
+  "name": "Blog",
+  "dark": {
+   "accent": "#ffa4cf",
+   "hover": "#ffcae1",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#a2567c",
+   "hover": "#8c4268",
+   "ink": "#ffffff"
+  }
+ },
+ "code": {
+  "name": "Code",
+  "dark": {
+   "accent": "#35c2b0",
+   "hover": "#53d9c6",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#0b7363",
+   "hover": "#005d50",
+   "ink": "#ffffff"
+  }
+ },
+ "business": {
+  "name": "Business",
+  "dark": {
+   "accent": "#9fa9b8",
+   "hover": "#b5bfce",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#5c6372",
+   "hover": "#49505e",
+   "ink": "#ffffff"
+  }
+ },
+ "marketing": {
+  "name": "Marketing",
+  "dark": {
+   "accent": "#e0457b",
+   "hover": "#f95d90",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#c13686",
+   "hover": "#a91a71",
+   "ink": "#ffffff"
+  }
+ },
+ "ecom": {
+  "name": "Shop",
+  "dark": {
+   "accent": "#92b3ff",
+   "hover": "#b4cbfe",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#4a6bc2",
+   "hover": "#3756ab",
+   "ink": "#ffffff"
+  }
+ },
+ "author": {
+  "name": "Author",
+  "dark": {
+   "accent": "#d595ee",
+   "hover": "#e8afff",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#9257ab",
+   "hover": "#7d4295",
+   "ink": "#ffffff"
+  }
+ },
+ "dash": {
+  "name": "Dash",
+  "dark": {
+   "accent": "#9d8ff7",
+   "hover": "#b3aafd",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#7f54d6",
+   "hover": "#6b3dbe",
+   "ink": "#ffffff"
+  }
+ }
+}

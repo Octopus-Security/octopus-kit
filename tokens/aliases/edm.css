@@ -1,0 +1,69 @@
+/* Alias sheet: octopus-edm (frontend/src/styles/tokens.css). octopus-media uses the same hex
+   values inside Tailwind; see docs/theming.md (it takes tailwind-preset.cjs instead).
+   Differences worth knowing: edm's radii were 4/8/12, the kit's are 6/10/14; edm was
+   dark-only and now follows the user's mode. The --track-* hues are data colours for the
+   mixer lanes, not theme colours, so they stay fixed in both modes. */
+:root {
+  --bg: var(--o-bg);
+  --surface: var(--o-surface);
+  --surface-2: var(--o-surface-2);
+  --surface-3: var(--o-surface-3);
+  --surface-4: color-mix(in srgb, var(--o-surface-3) 80%, var(--o-text));
+
+  --border: var(--o-border);
+  --border-2: color-mix(in srgb, var(--o-border) 75%, var(--o-text));
+
+  --text: var(--o-text);
+  --text-body: color-mix(in srgb, var(--o-text) 80%, var(--o-muted));
+  --muted: var(--o-muted);
+  --muted-2: var(--o-dim);
+
+  --accent: var(--o-accent);
+  --accent-h: var(--o-accent-hover);
+  --accent-dim: color-mix(in srgb, var(--o-accent) 14%, transparent);
+  --accent-glow: 0 0 12px color-mix(in srgb, var(--o-accent) 40%, transparent);
+
+  --danger: var(--o-danger);
+  --warning: var(--o-warn);
+  --info: var(--o-info);
+  --record: var(--o-danger);
+
+  --track-drums: #e74c3c;
+  --track-bass: #9b59b6;
+  --track-synths: #3498db;
+  --track-fx: #f39c12;
+  --track-vocals: #e91e63;
+  --track-melodic: #2ecc71;
+  --track-loops: #1abc9c;
+  --track-misc: #95a5a6;
+
+  --gap-xs: var(--o-space-1);
+  --gap-sm: var(--o-space-2);
+  --gap-md: var(--o-space-3);
+  --gap-lg: var(--o-space-4);
+  --gap-xl: var(--o-space-5);
+
+  --radius-sm: var(--o-radius-sm);
+  --radius-md: var(--o-radius-md);
+  --radius-lg: var(--o-radius-lg);
+  --radius-xl: calc(var(--o-radius-lg) + 4px);
+  --radius-pill: 9999px;
+
+  --font-sans: var(--o-font-sans);
+  --font-mono: var(--o-font-mono);
+
+  --shadow-sm: var(--o-shadow-1);
+  --shadow-md: var(--o-shadow-2);
+  --shadow-lg: var(--o-shadow-2);
+
+  --ease-out: var(--o-ease);
+  --ease-in: cubic-bezier(0.64, 0, 0.78, 0);
+  --dur-fast: 80ms;
+  --dur-mid: var(--o-dur);
+  --dur-slow: 280ms;
+
+  --transport-h: 52px;
+  --tabbar-h: 38px;
+  --sidebar-w: 260px;
+  --header-h: 44px;
+}

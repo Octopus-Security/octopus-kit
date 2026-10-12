@@ -1,0 +1,11 @@
+/* Alias sheet: octopus-kitchen (public/theme.css). Names already match the kit's roles. */
+:root {
+  --bg: var(--o-bg);
+  --surface: var(--o-surface);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --muted: var(--o-muted);
+  --dim: var(--o-dim);
+  --accent: var(--o-accent);
+  --accent-ink: var(--o-accent-ink);
+}
