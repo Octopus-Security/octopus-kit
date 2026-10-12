@@ -194,9 +194,10 @@ test('the CLI: runs, lists files and the manual steps, refuses bad input with a 
 test('the accent: used when the kit can allocate one, a TODO is printed when it cannot', async () => {
   const { generate } = await load();
   const fakeKit = tmp('fakekit-'); fs.mkdirSync(path.join(fakeKit, 'tokens'));
-  fs.writeFileSync(path.join(fakeKit, 'tokens', 'accents.cjs'), "exports.nextFreeAccent = (slug) => ({ slug, accent: '#123456' });");
+  // The real contract: nextFreeAccent(existingRegistry = kit's, { name }) — never a slug as the first argument.
+  fs.writeFileSync(path.join(fakeKit, 'tokens', 'accents.cjs'), "exports.registry = {}; exports.nextFreeAccent = (existing, opts) => ({ existing, name: opts && opts.name, accent: '#123456' });");
   const withKit = generate({ slug: 'demo', name: 'Demo', profile: 'headless', dir: path.join(tmp('scaf-'), 'a'), kitDir: fakeKit });
-  assert.deepStrictEqual(withKit.accent, { slug: 'demo', accent: '#123456' });
+  assert.deepStrictEqual(withKit.accent, { existing: undefined, name: 'demo', accent: '#123456' });
   const without = generate({ slug: 'demo', name: 'Demo', profile: 'headless', dir: path.join(tmp('scaf-'), 'b'), kitDir: tmp('nokit-') });
   assert.strictEqual(without.accent, null);
   const broken = tmp('brokenkit-'); fs.mkdirSync(path.join(broken, 'tokens'));
@@ -322,4 +323,26 @@ test('refuses to boot on unsafe configuration: dev in production, sso without it
   assert.notStrictEqual(noPkg.status, 0); assert.match(noPkg.stderr, /auth-client is not installed/);
   const unknown = run({ AUTH_MODE: 'magic' });
   assert.notStrictEqual(unknown.status, 0); assert.match(unknown.stderr, /AUTH_MODE must be/);
+});
+
+// The scaffold and the accent registry are built by different halves of the kit;
+// this pins the seam. nextFreeAccent takes the registry to avoid, not a slug —
+// passing a slug made it iterate the slug's characters and throw, which
+// allocateAccent's try/catch then hid as "this kit cannot allocate".
+test('scaffold allocates a real, distinct accent for a new slug and reuses a reserved one', async () => {
+  const os = require('node:os');
+  const fsx = require('node:fs');
+  const pathx = require('node:path');
+  const { generate } = await import('../bin/create-octopus-app.mjs');
+  const accents = require('../tokens/accents.cjs');
+  const tmp = fsx.mkdtempSync(pathx.join(os.tmpdir(), 'kit-accent-'));
+  try {
+    const fresh = generate({ slug: 'zz-newapp', name: 'New', profile: 'headless', dir: pathx.join(tmp, 'a') });
+    assert.ok(fresh.accent && fresh.accent.dark && /^#[0-9a-f]{6}$/i.test(fresh.accent.dark.accent), 'no accent allocated for a new app');
+    const withNew = { ...accents.registry, 'zz-newapp': fresh.accent };
+    const problems = accents.validate(withNew);
+    assert.deepStrictEqual(Array.isArray(problems) ? problems : (problems.errors || []), [], 'allocated accent is not distinct');
+    const reserved = generate({ slug: 'budget', name: 'Budget', profile: 'headless', dir: pathx.join(tmp, 'b') });
+    assert.deepStrictEqual(reserved.accent, accents.registry.budget);
+  } finally { fsx.rmSync(tmp, { recursive: true, force: true }); }
 });

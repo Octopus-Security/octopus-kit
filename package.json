@@ -4,7 +4,24 @@
   "description": "Shared themes, server helpers, app manifest and scaffold for the octopus app suite",
   "license": "MIT",
   "type": "commonjs",
-  "engines": { "node": ">=20" },
-  "files": ["tokens", "ui", "server", "manifest", "bin"],
-  "scripts": { "test": "node --test test/" }
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "tokens",
+    "ui",
+    "server",
+    "manifest",
+    "bin",
+    "templates",
+    "docs"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "build:tokens": "node scripts/build-tokens.mjs",
+    "check:tokens": "node scripts/build-tokens.mjs --check"
+  },
+  "bin": {
+    "create-octopus-app": "bin/create-octopus-app.mjs"
+  }
 }

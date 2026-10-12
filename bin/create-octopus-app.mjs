@@ -77,8 +77,10 @@ function validateInputs({ slug, name, profile, subdomain, domain, access, icon }
 function allocateAccent(slug, kitDir) {
   try {
     const mod = require(path.join(kitDir, 'tokens', 'accents.cjs'));
+    if (mod.registry && mod.registry[slug]) return mod.registry[slug];   // already reserved
     if (typeof mod.nextFreeAccent !== 'function') return null;
-    return mod.nextFreeAccent(slug) || null;
+    // nextFreeAccent takes the registry to avoid (default: the kit's), not a slug.
+    return mod.nextFreeAccent(undefined, { name: slug }) || null;
   } catch { return null; }
 }
 
@@ -177,6 +179,7 @@ function steps({ slug, manifest, profile, accent }) {
   out.push(`SHOWCASE: add one line plus the marker <!-- showcase:octopus-${slug}:public|private --> to octopus-vault/SHOWCASE.md, or list the repo in HIDDEN in scripts/check-showcase.mjs with a reason.`);
   out.push('System map: node octopus-vault/scripts/system-map.mjs');
   out.push('ESTATE.md: if the app adds a capability others should know about, add a line to "What already exists".');
+  if (accent) out.push(`Reserve the accent: add "${slug}": ${JSON.stringify(accent)} to octopus-kit/tokens/accents.json, run node scripts/build-tokens.mjs, and tag a new kit release — until then data-app="${slug}" falls back to the default accent.`);
   if (!accent) out.push(`TODO accent: this kit version cannot allocate one. Add "${slug}" to octopus-kit/tokens/accents.json with an unused colour (the distinctness test enforces it), then redeploy with the new kit tag.`);
   out.push(`Tag the kit release your package.json points at (${KIT_REF}) before the first image build.`);
   return out;
