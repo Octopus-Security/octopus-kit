@@ -23,8 +23,7 @@ const read = (d, f) => fs.readFileSync(path.join(d, f), 'utf8');
 
 function lender() {
   const cands = [process.env.OCTOPUS_LENDER, path.resolve(KIT, '..', 'octopus-shopper', 'node_modules'),
-    path.resolve(KIT, '..', '..', 'octopus-shopper', 'node_modules'),
-    '/home/psychopathy/Documents/octopus-tentacles/octopus-shopper/node_modules'].filter(Boolean);
+    path.resolve(KIT, '..', '..', 'octopus-shopper', 'node_modules')].filter(Boolean);
   return cands.find(c => fs.existsSync(path.join(c, 'express', 'package.json')) && fs.existsSync(path.join(c, 'ejs', 'package.json')));
 }
 const LENDER = lender();
