@@ -1,0 +1,10 @@
+{
+  "name": "octopus-kit",
+  "version": "0.1.0",
+  "description": "Shared themes, server helpers, app manifest and scaffold for the octopus app suite",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": { "node": ">=20" },
+  "files": ["tokens", "ui", "server", "manifest", "bin"],
+  "scripts": { "test": "node --test test/" }
+}
