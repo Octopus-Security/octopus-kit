@@ -1,0 +1,35 @@
+/* Alias sheet: octopus-code (src/styles.css). The syntax-token and editor-pad colours are
+   content colours, not theme colours, so they remain fixed pairs (dark, light) via
+   light-dark(). Requires the kit's color-scheme to be set, which tokens.css does. */
+:root {
+  --bg: var(--o-bg);
+  --panel: var(--o-surface);
+  --panel-2: var(--o-surface-2);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --muted: var(--o-muted);
+  --accent: var(--o-accent);
+  --accent-ink: var(--o-accent-ink);
+
+  --ok: var(--o-success);
+  --ok-bg: color-mix(in srgb, var(--o-success) 14%, transparent);
+  --warn: var(--o-warn);
+  --warn-bg: color-mix(in srgb, var(--o-warn) 14%, transparent);
+  --bad: var(--o-danger);
+  --hint: var(--o-info);
+  --hint-bg: color-mix(in srgb, var(--o-info) 14%, transparent);
+
+  --code-bg: light-dark(#f3f5f8, #0b0e12);
+  --pad-bg: light-dark(#ffffff, #0b0e12);
+  --pad-ink: light-dark(#1b2129, #e3e8ee);
+  --tok-keyword: light-dark(#8e3bb8, #c792ea);
+  --tok-string: light-dark(#2f7d1f, #c3e88d);
+  --tok-number: light-dark(#b3501f, #f78c6c);
+  --tok-comment: light-dark(#7c8794, #6b7785);
+  --tok-title: light-dark(#2459c9, #82aaff);
+  --tok-builtin: light-dark(#8a6100, #ffcb6b);
+  --tok-literal: light-dark(#b3265a, #ff9cac);
+
+  --radius: var(--o-radius-md);
+  --mono: var(--o-font-mono);
+}

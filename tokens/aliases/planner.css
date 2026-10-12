@@ -1,0 +1,29 @@
+/* Alias sheet: octopus-planner (client/src/styles/theme.css). */
+:root {
+  --bg: var(--o-bg);
+  --panel: var(--o-surface);
+  --panel-2: var(--o-surface-2);
+  --border: var(--o-border);
+  --border-2: color-mix(in srgb, var(--o-border) 75%, var(--o-text));
+
+  --text: var(--o-text);
+  --text-2: color-mix(in srgb, var(--o-text) 60%, var(--o-muted));
+  --muted: var(--o-muted);
+  --faint: var(--o-dim);
+
+  --accent: var(--o-accent);
+  --accent-2: var(--o-accent-hover);
+  --success: var(--o-success);
+  --warn: var(--o-warn);
+  --danger: var(--o-danger);
+
+  --r-sm: var(--o-radius-sm);
+  --r-md: var(--o-radius-md);
+  --r-lg: var(--o-radius-lg);
+
+  --shadow-1: var(--o-shadow-1);
+  --shadow-2: var(--o-shadow-2);
+
+  --font-sans: var(--o-font-sans);
+  --font-mono: var(--o-font-mono);
+}

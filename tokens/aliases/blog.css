@@ -1,0 +1,13 @@
+/* Alias sheet: octopus-blog (src/styles/global.css). The blog is static: tokens.css +
+   theme-boot still work, since the boot snippet is inlined in the Astro layout. */
+:root {
+  --bg: var(--o-bg);
+  --surface: var(--o-surface);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --muted: var(--o-muted);
+  --dim: var(--o-dim);
+  --accent: var(--o-accent);
+  --accent-dim: color-mix(in srgb, var(--o-accent) 14%, var(--o-bg));
+  --maxw: 720px;
+}

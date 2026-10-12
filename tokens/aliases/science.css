@@ -1,0 +1,14 @@
+/* Alias sheet: octopus-science (public/css/app.css) and octopus-ee (public/css/app.css).
+   --acc is the brand accent; --acc2 was science's secondary blue and maps to --o-info. */
+:root {
+  --bg: var(--o-bg);
+  --pane: var(--o-surface);
+  --line: var(--o-border);
+  --fg: var(--o-text);
+  --mut: var(--o-muted);
+  --acc: var(--o-accent);
+  --acc2: var(--o-info);
+  --err: var(--o-danger);
+  --warn: var(--o-warn);
+  --radius: var(--o-radius-md);
+}

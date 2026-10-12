@@ -1,0 +1,13 @@
+/* Alias sheet: octopus-ecom (client/src/styles.css). --pos / --neg are profit and loss
+   figures, so they map to success / danger rather than to the accent. */
+:root {
+  --bg: var(--o-bg);
+  --panel: var(--o-surface);
+  --line: var(--o-border);
+  --text: var(--o-text);
+  --muted: var(--o-muted);
+  --accent: var(--o-accent);
+  --pos: var(--o-success);
+  --neg: var(--o-danger);
+  --warn: var(--o-warn);
+}

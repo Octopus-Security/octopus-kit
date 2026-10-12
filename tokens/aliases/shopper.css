@@ -1,0 +1,27 @@
+/* Alias sheet: shopper + author (public/style.css). Link tokens.css (+ accents.css) first,
+   then this, then delete the app's own :root block.
+   --green IS the app's brand accent in both apps (buttons, active tab, borders), so it maps
+   to --o-accent and picks up the per-app colour (set data-app="shopper" / "author").
+   The other colour names are fixed hues, mapped to the nearest semantic token. */
+:root {
+  --bg: var(--o-bg);
+  --surface: var(--o-surface);
+  --surface2: var(--o-surface-2);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --muted: var(--o-muted);
+
+  --green: var(--o-accent);
+  --green-dim: color-mix(in srgb, var(--o-accent) 14%, transparent);
+  --red: var(--o-danger);
+  --blue: var(--o-info);
+  --blue-dim: color-mix(in srgb, var(--o-info) 14%, transparent);
+  --orange: var(--o-warn);
+  --orange-dim: color-mix(in srgb, var(--o-warn) 14%, transparent);
+  --yellow: var(--o-warn);
+  --yellow-dim: color-mix(in srgb, var(--o-warn) 14%, transparent);
+
+  /* author only: no semantic equivalent, so a fixed pair (dark, light). */
+  --purple: light-dark(#7b3fb8, #b57bee);
+  --purple-dim: color-mix(in srgb, light-dark(#7b3fb8, #b57bee) 14%, transparent);
+}

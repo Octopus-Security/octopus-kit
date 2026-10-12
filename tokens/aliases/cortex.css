@@ -1,0 +1,34 @@
+/* Alias sheet: octopus-cortex (client/src/index.css), octopus-business and octopus-marketing
+   (public/css/app.css). Their own [data-theme="light"] blocks can be deleted too: the kit
+   already switches every --o-* token. Business/marketing's runtime brand override
+   (":root { --accent: ... }" in head.ejs) still wins because it comes later; leave it
+   only if per-deployment branding is wanted, otherwise drop it and use data-app.
+   Names below include the ones only used in some of the three apps. */
+:root {
+  --bg: var(--o-bg);
+  --bg-1: var(--o-bg);
+  --bg-2: var(--o-surface);
+  --bg-3: var(--o-surface-2);
+  --bg-hover: var(--o-surface-3);
+  --bg-input: var(--o-bg);
+  --panel-2: var(--o-surface-2);
+  --border: var(--o-border);
+  --text: var(--o-text);
+  --text-muted: var(--o-muted);
+  --muted: var(--o-muted);
+
+  --accent: var(--o-accent);
+  --accent-2: var(--o-accent-hover);
+
+  --user-bg: color-mix(in srgb, var(--o-info) 22%, var(--o-surface));
+  --user-text: var(--o-text);
+
+  --ok: var(--o-success);
+  --bad: var(--o-danger);
+  --warn: var(--o-warn);
+  --warning: var(--o-warn);
+
+  --radius: var(--o-radius-md);
+  --font: var(--o-font-sans);
+  --font-mono: var(--o-font-mono);
+}
