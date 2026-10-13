@@ -175,3 +175,19 @@ accept several. `.is-disabled` greys it out (also disable the input).
 </label>
 <script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-dropzone.js"></script>
 ```
+
+## Copy box
+
+A value (invite code, link, token you must show once) in a mono box with a Copy button beside it. The text
+is `user-select: all`, so one tap or click selects it even without JavaScript. The optional
+`blocks/o-copy.js` makes the button copy it and show "Copied" for two seconds: point `data-o-copy` at the
+text's `#id`, or leave it bare to use the `.o-copy__text` in the same box; `data-o-copied="Done"` changes the
+message. `--wrap` lets a long value wrap instead of scrolling.
+
+```html
+<div class="o-copy">
+  <code class="o-copy__text" id="invite">octo-4F7K-92QX</code>
+  <button class="o-btn o-copy__btn" type="button" data-o-copy="#invite">Copy</button>
+</div>
+<script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-copy.js"></script>
+```
