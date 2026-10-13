@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="../tokens/accents.css">
 <link rel="stylesheet" href="../ui/base.css">
 <link rel="stylesheet" href="../ui/components.css">
+<link rel="stylesheet" href="../ui/layout.css">
+<script type="module" src="../blocks/o-shell.js"></script>
 <style>
   .panel { background: var(--o-bg); color: var(--o-text); padding: var(--o-space-5); margin: var(--o-space-4) 0; border: 1px solid var(--o-border); border-radius: var(--o-radius-lg); }
   .panel > * + * { margin-top: var(--o-space-4); }
@@ -21,6 +23,10 @@
   .sw code { font-size: 0.75rem; }
   .sw button { margin-left: auto; }
   body { padding: 0 var(--o-space-4) var(--o-space-6); }
+  .shell-box { height: 26rem; border: 1px solid var(--o-border); border-radius: var(--o-radius-lg); overflow: hidden; }
+  .demo-cell { background: var(--o-surface-2); padding: var(--o-space-3); border-radius: var(--o-radius-md); }
+  .bar-box { position: relative; height: 7rem; overflow: hidden; border: 1px solid var(--o-border); border-radius: var(--o-radius-md); }
+  .bar-box .o-fixed-bar { position: absolute; }
 </style>
 </head>
 <body>
@@ -76,6 +82,47 @@
       <div class="o-toast o-toast--danger" role="alert">Something failed.</div>
     </div>
   </div>
+</section>
+<h2>Layout</h2>
+<p class="o-muted">From <code>ui/layout.css</code>. <strong>View this page at 390, 768 and 1280 px wide</strong> (browser responsive mode): the shell drawer becomes a sidebar at 768, the cards below become a table at 480, and the dialog stops being a bottom sheet at 768. Breakpoints: sm 480, md 768, lg 1024, xl 1280.</p>
+<section class="panel" data-theme="dark" data-app="cortex">
+  <h3>.o-shell (drawer below 768, sidebar from 768)</h3>
+  <div class="shell-box"><div class="o-shell o-shell--contained">
+    <input type="checkbox" id="demo-nav" class="o-shell__toggle" aria-label="Menu" autocomplete="off">
+    <header class="o-shell__header">
+      <label class="o-shell__menu-btn" for="demo-nav"><span class="o-shell__menu-icon" aria-hidden="true"></span><span class="o-sr-only">Menu</span></label>
+      <a class="o-shell__brand" href="#">Octopus</a><span class="o-shell__spacer"></span><button class="o-btn o-btn--sm">Account</button>
+    </header>
+    <nav class="o-shell__nav" aria-label="Main">
+      <div class="o-shell__nav-head"><strong>Menu</strong><label class="o-shell__close" for="demo-nav"><span class="o-sr-only">Close menu</span></label></div>
+      <a class="o-nav__link is-active" href="#" aria-current="page">Home</a><a class="o-nav__link" href="#">Things</a><a class="o-nav__link" href="#">Reports</a><a class="o-nav__link" href="#">Settings</a>
+    </nav>
+    <label class="o-shell__scrim" for="demo-nav"></label>
+    <main class="o-shell__main"><div class="o-page"><h3>Page</h3><p>Content inside <code>.o-page</code>. A very long unbroken string: https://example.com/a/really/long/path/that/would/otherwise/push/the/page/sideways/forever/and/ever</p></div></main>
+  </div></div>
+</section>
+<section class="panel" data-theme="dark" data-app="cortex">
+  <h3>.o-grid, .o-cluster, .o-stack</h3>
+  <div class="o-grid"><div class="o-card">One</div><div class="o-card">Two</div><div class="o-card">Three</div><div class="o-card">Four</div></div>
+  <div class="o-cluster o-cluster--between"><span class="o-badge">Tags</span><span class="o-cluster"><button class="o-btn o-btn--sm">A</button><button class="o-btn o-btn--sm">B</button><button class="o-btn o-btn--icon" aria-label="Icon">+</button></span></div>
+  <div class="o-stack o-stack--sm demo-cell"><div>Stacked one</div><div>Stacked two</div></div>
+</section>
+<section class="panel" data-theme="dark" data-app="cortex">
+  <h3>.o-table-wrap (scrolls with an edge cue) and .o-table--cards (cards below 480)</h3>
+  <div class="o-table-wrap" tabindex="0" role="region" aria-label="Scrolling table"><table class="o-table" style="min-width:42rem"><thead><tr><th>Name</th><th>Status</th><th>Total</th><th>Owner</th><th>Updated</th><th>Notes</th></tr></thead><tbody>
+    <tr><td>Alpha</td><td>ok</td><td>$12.00</td><td>one</td><td>today</td><td>wide enough to scroll</td></tr><tr><td>Beta</td><td>late</td><td>$7.50</td><td>two</td><td>today</td><td>second row</td></tr></tbody></table></div>
+  <table class="o-table o-table--cards"><thead><tr><th>Name</th><th>Status</th><th>Total</th></tr></thead><tbody>
+        <tr><td data-label="Name">Alpha</td><td data-label="Status">ok</td><td data-label="Total">$12.00</td></tr>
+        <tr><td data-label="Name">Beta</td><td data-label="Status">late</td><td data-label="Total">$7.50</td></tr>
+        <tr><td data-label="Name">Gamma</td><td data-label="Status">ok</td><td data-label="Total">$31.25</td></tr></tbody></table>
+</section>
+<section class="panel" data-theme="dark" data-app="cortex">
+  <h3>.o-modal as a native dialog (bottom sheet below 768), .o-fixed-bar, .o-toast</h3>
+  <button class="o-btn o-btn--primary" onclick="document.getElementById('demo-dlg').showModal()">Open dialog</button>
+  <dialog id="demo-dlg" class="o-modal" aria-labelledby="demo-dlg-t"><h3 class="o-modal__title" id="demo-dlg-t">Dialog</h3><p>Scrolls inside when taller than the screen. Escape closes it.</p>
+    <div class="o-modal__actions"><button class="o-btn o-btn--ghost" onclick="this.closest('dialog').close()">Cancel</button><button class="o-btn o-btn--primary" onclick="this.closest('dialog').close()">Confirm</button></div></dialog>
+  <div class="bar-box"><div class="o-fixed-bar"><span>Fixed bar (shown absolute here)</span><button class="o-btn o-btn--primary o-btn--sm" style="margin-left:auto">Save</button></div></div>
+  <label class="o-check"><input type="checkbox"> A checkbox with a full-size hit area</label>
 </section>
 <h2>App accents (dark and light, in registry order)</h2>
 <div class="sw-grid">

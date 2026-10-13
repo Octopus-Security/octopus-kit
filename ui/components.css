@@ -3,22 +3,31 @@
 /* ---- Button ---------------------------------------------------------- */
 .o-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--o-space-2);
-  padding: var(--o-space-2) var(--o-space-4);
+  min-height: var(--o-tap); padding: var(--o-space-2) var(--o-space-4);
   background: var(--o-surface-2); color: var(--o-text);
   border: 1px solid var(--o-border); border-radius: var(--o-radius-md);
   font-weight: 500; line-height: 1.3; text-decoration: none; cursor: pointer;
   transition: background var(--o-dur) var(--o-ease), border-color var(--o-dur) var(--o-ease), color var(--o-dur) var(--o-ease);
 }
-.o-btn:hover { background: var(--o-surface-3); border-color: var(--o-dim); color: var(--o-text); }
 .o-btn:active { transform: translateY(1px); }
 .o-btn[disabled], .o-btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 .o-btn--primary { background: var(--o-accent); color: var(--o-accent-ink); border-color: var(--o-accent); }
-.o-btn--primary:hover { background: var(--o-accent-hover); border-color: var(--o-accent-hover); color: var(--o-accent-ink); }
 .o-btn--danger { background: var(--o-danger); color: var(--o-bg); border-color: var(--o-danger); }
-.o-btn--danger:hover { background: var(--o-danger); border-color: var(--o-danger); color: var(--o-bg); filter: brightness(1.1); }
 .o-btn--ghost { background: transparent; border-color: transparent; color: var(--o-muted); }
-.o-btn--ghost:hover { background: var(--o-surface-2); border-color: var(--o-border); color: var(--o-text); }
-
+/* Small and icon-only buttons stay compact for a mouse and grow to a full tap target under a finger. */
+.o-btn--sm { min-height: 2rem; padding: var(--o-space-1) var(--o-space-3); font-size: 0.875rem; }
+.o-btn--icon { min-height: 2.25rem; min-width: 2.25rem; padding: var(--o-space-1); }
+@media (pointer: coarse) {
+  .o-btn--sm, .o-btn--icon { min-height: var(--o-tap); }
+  .o-btn--icon { min-width: var(--o-tap); }
+}
+.o-btn:focus-visible { outline: 2px solid var(--o-accent); outline-offset: 2px; }
+@media (hover: hover) {
+  .o-btn:hover { background: var(--o-surface-3); border-color: var(--o-dim); color: var(--o-text); }
+  .o-btn--primary:hover { background: var(--o-accent-hover); border-color: var(--o-accent-hover); color: var(--o-accent-ink); }
+  .o-btn--danger:hover { background: var(--o-danger); border-color: var(--o-danger); color: var(--o-bg); filter: brightness(1.1); }
+  .o-btn--ghost:hover { background: var(--o-surface-2); border-color: var(--o-border); color: var(--o-text); }
+}
 /* ---- Card ------------------------------------------------------------ */
 .o-card {
   background: var(--o-surface); color: var(--o-text);
@@ -31,17 +40,25 @@
 /* ---- Form controls --------------------------------------------------- */
 .o-input, .o-select, .o-textarea {
   display: block; width: 100%;
+  /* 16px floor: iOS Safari zooms the page on focus of anything smaller. */
+  font-size: max(16px, 1rem); min-height: var(--o-tap);
   padding: var(--o-space-2) var(--o-space-3);
   background: var(--o-bg); color: var(--o-text);
   border: 1px solid var(--o-border); border-radius: var(--o-radius-md);
   transition: border-color var(--o-dur) var(--o-ease);
 }
 .o-input::placeholder, .o-textarea::placeholder { color: var(--o-dim); }
-.o-input:hover, .o-select:hover, .o-textarea:hover { border-color: var(--o-dim); }
+@media (hover: hover) {
+  .o-input:hover, .o-select:hover, .o-textarea:hover { border-color: var(--o-dim); }
+}
 .o-input:focus-visible, .o-select:focus-visible, .o-textarea:focus-visible { outline: 2px solid var(--o-accent); outline-offset: 1px; border-color: var(--o-accent); }
 .o-input[aria-invalid="true"], .o-select[aria-invalid="true"], .o-textarea[aria-invalid="true"] { border-color: var(--o-danger); }
 .o-input:disabled, .o-select:disabled, .o-textarea:disabled { opacity: 0.55; cursor: not-allowed; }
 .o-textarea { min-height: 6rem; resize: vertical; }
+/* Checkbox / radio with a full-size hit area: wrap the input and its text in one label. */
+.o-check { display: flex; align-items: center; gap: var(--o-space-3); min-height: var(--o-tap); cursor: pointer; }
+.o-check > input { flex: none; width: 1.25rem; height: 1.25rem; margin: 0; accent-color: var(--o-accent); }
+@media (pointer: coarse) { .o-check > input { width: 1.5rem; height: 1.5rem; } }
 .o-label { display: block; margin-bottom: var(--o-space-1); color: var(--o-muted); font-size: 0.875rem; }
 
 /* ---- Nav ------------------------------------------------------------- */
@@ -51,16 +68,24 @@
   background: var(--o-surface); border-bottom: 1px solid var(--o-border);
 }
 .o-nav__brand { margin-right: var(--o-space-4); font-weight: 700; color: var(--o-accent); text-decoration: none; }
-.o-nav__link { padding: var(--o-space-2) var(--o-space-3); color: var(--o-muted); text-decoration: none; border-radius: var(--o-radius-sm); }
-.o-nav__link:hover { color: var(--o-text); background: var(--o-surface-2); }
-.o-nav__link[aria-current="page"], .o-nav__link.is-active { color: var(--o-text); background: var(--o-surface-3); box-shadow: inset 0 -2px 0 var(--o-accent); }
+.o-nav__link { display: inline-flex; align-items: center; min-height: var(--o-tap); padding: var(--o-space-2) var(--o-space-3); color: var(--o-muted); text-decoration: none; border-radius: var(--o-radius-sm); }
+@media (hover: hover) {
+  .o-nav__link:hover { color: var(--o-text); background: var(--o-surface-2); }
+}.o-nav__link[aria-current="page"], .o-nav__link.is-active { color: var(--o-text); background: var(--o-surface-3); box-shadow: inset 0 -2px 0 var(--o-accent); }
 .o-nav__spacer { flex: 1 1 auto; }
+/* Inside the layout shell the same markup stacks in the drawer / sidebar, or runs as a bare row in the header. */
+.o-shell__nav .o-nav { flex-direction: column; flex-wrap: nowrap; align-items: stretch; padding: 0; background: none; border: 0; }
+.o-shell__nav .o-nav__brand { margin: 0 0 var(--o-space-2); }
+.o-shell__nav .o-nav__link { display: flex; }
+.o-shell__header .o-nav { flex: 1 1 auto; flex-wrap: nowrap; padding: 0; background: none; border: 0; overflow-x: auto; }
 
 /* ---- Table ----------------------------------------------------------- */
 .o-table { width: 100%; border-collapse: collapse; background: var(--o-surface); border: 1px solid var(--o-border); border-radius: var(--o-radius-md); }
 .o-table th, .o-table td { padding: var(--o-space-2) var(--o-space-3); text-align: left; border-bottom: 1px solid var(--o-border); }
 .o-table th { color: var(--o-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; background: var(--o-surface-2); }
-.o-table tbody tr:hover { background: var(--o-surface-2); }
+@media (hover: hover) {
+  .o-table tbody tr:hover { background: var(--o-surface-2); }
+}
 .o-table tr:last-child td { border-bottom: 0; }
 .o-table-wrap { overflow-x: auto; }
 
@@ -79,6 +104,8 @@
 /* ---- Modal (works with <dialog class="o-modal"> or a wrapper .o-modal[hidden]) */
 .o-modal {
   max-width: min(32rem, calc(100vw - 2 * var(--o-space-4))); width: 100%;
+  max-height: calc(100vh - 2 * var(--o-space-4)); max-height: calc(100dvh - 2 * var(--o-space-4));
+  overflow-y: auto; overscroll-behavior: contain;
   padding: var(--o-space-5); margin: auto;
   background: var(--o-surface); color: var(--o-text);
   border: 1px solid var(--o-border); border-radius: var(--o-radius-lg); box-shadow: var(--o-shadow-2);
@@ -86,10 +113,14 @@
 .o-modal::backdrop { background: var(--o-scrim); }
 .o-modal__title { margin: 0 0 var(--o-space-3); font-size: 1.2rem; }
 .o-modal__actions { display: flex; justify-content: flex-end; gap: var(--o-space-2); margin-top: var(--o-space-5); }
-.o-modal-scrim { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: var(--o-space-4); background: var(--o-scrim); z-index: 1000; }
+.o-modal-scrim {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1000;
+  padding: max(var(--o-space-4), env(safe-area-inset-top, 0px)) max(var(--o-space-4), env(safe-area-inset-right, 0px)) max(var(--o-space-4), env(safe-area-inset-bottom, 0px)) max(var(--o-space-4), env(safe-area-inset-left, 0px));
+  background: var(--o-scrim);
+}
 
 /* ---- Toast ----------------------------------------------------------- */
-.o-toast-region { position: fixed; right: var(--o-space-4); bottom: var(--o-space-4); display: flex; flex-direction: column; gap: var(--o-space-2); z-index: 1100; max-width: calc(100vw - 2 * var(--o-space-4)); }
+.o-toast-region { position: fixed; right: max(var(--o-space-4), env(safe-area-inset-right, 0px)); bottom: max(var(--o-space-4), env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: var(--o-space-2); z-index: 1100; max-width: calc(100vw - 2 * var(--o-space-4)); }
 .o-toast {
   display: flex; align-items: center; gap: var(--o-space-3);
   padding: var(--o-space-3) var(--o-space-4); min-width: 14rem;
@@ -104,10 +135,13 @@
 /* ---- Tabs ------------------------------------------------------------ */
 .o-tabs { display: flex; gap: var(--o-space-1); border-bottom: 1px solid var(--o-border); overflow-x: auto; }
 .o-tab {
-  padding: var(--o-space-2) var(--o-space-4); background: none; border: 0; color: var(--o-muted);
+  min-height: var(--o-tap); padding: var(--o-space-2) var(--o-space-4); background: none; border: 0; color: var(--o-muted);
   border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; white-space: nowrap;
   transition: color var(--o-dur) var(--o-ease), border-color var(--o-dur) var(--o-ease);
 }
-.o-tab:hover { color: var(--o-text); }
+.o-tab:focus-visible { outline-offset: -2px; } /* the tab strip clips an outset ring */
+@media (hover: hover) {
+  .o-tab:hover { color: var(--o-text); }
+}
 .o-tab[aria-selected="true"], .o-tab.is-active { color: var(--o-text); border-bottom-color: var(--o-accent); }
 .o-tabpanel { padding: var(--o-space-4) 0; }
