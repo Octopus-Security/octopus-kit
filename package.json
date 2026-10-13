@@ -13,13 +13,16 @@
     "server",
     "manifest",
     "bin",
+    "blocks",
     "templates",
     "docs"
   ],
   "scripts": {
     "test": "node --test",
     "build:tokens": "node scripts/build-tokens.mjs",
-    "check:tokens": "node scripts/build-tokens.mjs --check"
+    "check:tokens": "node scripts/build-tokens.mjs --check",
+    "build:channel": "node scripts/build-channel.mjs --check",
+    "release": "node scripts/release.mjs"
   },
   "bin": {
     "create-octopus-app": "bin/create-octopus-app.mjs"
