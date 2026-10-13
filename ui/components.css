@@ -257,3 +257,29 @@
 /* Boxed variant for an empty list inside a page. */
 .o-empty--box { background: var(--o-surface); border: 1px dashed var(--o-border); border-radius: var(--o-radius-lg); }
 .o-empty--sm { padding: var(--o-space-4); }
+
+/* ---- Accordion ------------------------------------------------------- */
+/* A stack of native <details>: keyboard and screen-reader behaviour comes from the browser, no JS.
+   Give several the same name="" attribute and the browser keeps only one open at a time. */
+.o-accordion { display: flex; flex-direction: column; gap: var(--o-space-2); }
+.o-accordion__item { background: var(--o-surface); color: var(--o-text); border: 1px solid var(--o-border); border-radius: var(--o-radius-md); }
+.o-accordion__summary {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--o-space-3);
+  min-height: var(--o-tap); padding: var(--o-space-2) var(--o-space-4);
+  font-weight: 600; cursor: pointer; list-style: none; border-radius: var(--o-radius-md);
+}
+.o-accordion__summary::-webkit-details-marker { display: none; }
+.o-accordion__summary::after {
+  content: ""; flex: none; width: 0.5rem; height: 0.5rem; margin-right: 0.25rem;
+  border-right: 2px solid var(--o-muted); border-bottom: 2px solid var(--o-muted);
+  transform: rotate(45deg); transition: transform var(--o-dur) var(--o-ease);
+}
+.o-accordion__item[open] > .o-accordion__summary::after { transform: rotate(-135deg); }
+.o-accordion__summary:focus-visible { outline: 2px solid var(--o-accent); outline-offset: -2px; }
+@media (hover: hover) {
+  .o-accordion__summary:hover { background: var(--o-surface-2); }
+}
+.o-accordion__body { padding: 0 var(--o-space-4) var(--o-space-4); overflow-wrap: anywhere; }
+.o-accordion__body > :first-child { margin-top: 0; }
+.o-accordion__body > :last-child { margin-bottom: 0; }
+@media (prefers-reduced-motion: reduce) { .o-accordion__summary::after { transition: none; } }

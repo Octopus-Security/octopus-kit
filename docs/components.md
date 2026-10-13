@@ -89,3 +89,22 @@ Centred "nothing here yet" with a reason and the action that fixes it. Everythin
   <div class="o-empty__actions"><button class="o-btn o-btn--primary" type="button">Add entry</button></div>
 </div>
 ```
+
+## Accordion
+
+Native `<details>`, so it opens with Enter/Space, is announced correctly and needs no JavaScript. Give
+every item the same `name` and the browser keeps one open at a time; omit `name` to let several stay open.
+Put `open` on an item to start it expanded. The summary is a full 44px tap target.
+
+```html
+<div class="o-accordion">
+  <details class="o-accordion__item" name="steps" open>
+    <summary class="o-accordion__summary">Check the 3.3V rail</summary>
+    <div class="o-accordion__body"><p>Set the meter to DC volts.</p></div>
+  </details>
+  <details class="o-accordion__item" name="steps">
+    <summary class="o-accordion__summary">Continuity test</summary>
+    <div class="o-accordion__body"><p>Touch the leads together.</p></div>
+  </details>
+</div>
+```
