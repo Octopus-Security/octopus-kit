@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pack.schema.json",
+  "title": "octopus-favicon-pack v1",
+  "description": "A brand pack: the favicon/icon assets for one app slug, from either a cheap emoji SVG (octopus-kit) or a designed sharp-rendered set (octopus-studio). pack.js is the executable form of this schema and adds the cross-field rules a schema cannot (sha256/bytes actually matching data, declared type matching role, at most one file per role, the favicon role required). The directory form used for a zip download carries the same object as pack.json, minus each file's `data` (the bytes are the sibling file at `path` instead).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "slug", "name", "files"],
+  "properties": {
+    "format": { "const": "octopus-favicon-pack" },
+    "version": { "const": 1 },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,39}$",
+      "description": "The app's hub-apps.json slug. Never invented — it is what the pack is assigned to."
+    },
+    "name": { "type": "string", "minLength": 1, "description": "Display name, for the webmanifest." },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["emoji", "svg", "raster"] },
+        "value": { "type": "string", "description": "The emoji, or the sanitised SVG markup. Omitted or producer-defined for kind \"raster\"." }
+      },
+      "required": ["kind"]
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "background": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+      }
+    },
+    "generator": { "type": "string", "description": "e.g. \"octopus-kit@0.4.0\" or \"octopus-studio@1.2.0\"." },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "description": "At most one file per role (validate.js enforces this; a schema cannot). The \"favicon\" role is the only required one.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "type", "bytes", "sha256", "encoding", "data"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1, "description": "Filename within the pack, e.g. \"favicon.svg\"." },
+          "role": {
+            "enum": ["favicon", "favicon-16", "favicon-32", "favicon-48", "ico", "apple-touch", "icon-192", "icon-512", "maskable-512", "social"]
+          },
+          "type": { "type": "string", "description": "MIME type. Must equal the role's fixed type (image/svg+xml for favicon, image/png for the raster roles, image/x-icon for ico)." },
+          "width": { "type": "integer", "minimum": 1 },
+          "height": { "type": "integer", "minimum": 1 },
+          "bytes": { "type": "integer", "minimum": 0, "description": "Must equal the decoded length of `data`." },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Of the decoded bytes of `data`. What packId is computed from, together with role/path/slug/version." },
+          "encoding": { "enum": ["utf8", "base64"] },
+          "data": { "type": "string", "description": "The file content, as `encoding` says. Absent in the directory form's pack.json — the bytes are the sibling file at `path` instead." }
+        }
+      }
+    }
+  }
+}
