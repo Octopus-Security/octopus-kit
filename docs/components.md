@@ -22,3 +22,20 @@ screen reader the label and value as a pair. A tile also works standalone in a `
 
 Modifiers on `.o-stat`: `--accent`, `--pos`, `--warn`, `--neg` (colour the value), `--center`, `--flat` (no box).
 Colour is never the only signal: put the sign or a word in the value or `__sub` (`-$4.00`, `late`).
+
+## Alert / callout
+
+One box for banners, flash messages, inline errors and note callouts. Tone edge on the left, tinted
+background, text in the normal text colour. Put `role="alert"` on `--warn` and `--danger` (announced at
+once) and `role="status"` on the rest (announced politely). A message that is always on the page and not
+a reaction to something (a disclosure, a legal note) needs no role.
+
+```html
+<div class="o-alert o-alert--danger" role="alert">
+  <div class="o-alert__body"><strong class="o-alert__title">Could not save.</strong> Weight must be a number.</div>
+  <div class="o-alert__actions"><button class="o-btn o-btn--sm" type="button">Retry</button></div>
+</div>
+```
+
+Tones: default (info), `--success`, `--warn`, `--danger`. `__title` and `__actions` are optional; with no
+actions the body fills the row. Use `.o-toast` for a message that appears over the page and goes away.

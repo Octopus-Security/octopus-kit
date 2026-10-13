@@ -169,3 +169,24 @@
 .o-stat--center { align-items: center; text-align: center; }
 /* No box, for a row of figures inside a card or a header. */
 .o-stat--flat { padding: 0; background: none; border: 0; border-radius: 0; }
+
+/* ---- Alert / callout ------------------------------------------------- */
+/* An inline message with a tone edge. The text stays --o-text so contrast holds in every theme; the tone is
+   carried by the edge, the tint and the title. Use role="alert" for danger/warn, role="status" otherwise. */
+.o-alert {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--o-space-2) var(--o-space-3);
+  padding: var(--o-space-3) var(--o-space-4);
+  background: var(--o-surface-2); color: var(--o-text);
+  background: color-mix(in srgb, var(--o-info) 10%, var(--o-surface));
+  border: 1px solid color-mix(in srgb, var(--o-info) 35%, var(--o-border));
+  border-left: 4px solid var(--o-info); border-radius: var(--o-radius-md);
+}
+.o-alert > * { margin: 0; min-width: 0; }
+.o-alert__body { flex: 1 1 16rem; overflow-wrap: anywhere; }
+.o-alert__body > * { margin: 0; }
+.o-alert__body > * + * { margin-top: var(--o-space-2); }
+.o-alert__title { display: block; font-weight: 700; }
+.o-alert__actions { display: flex; flex-wrap: wrap; gap: var(--o-space-2); }
+.o-alert--success { background: color-mix(in srgb, var(--o-success) 10%, var(--o-surface)); border-color: color-mix(in srgb, var(--o-success) 35%, var(--o-border)); border-left-color: var(--o-success); }
+.o-alert--warn { background: color-mix(in srgb, var(--o-warn) 12%, var(--o-surface)); border-color: color-mix(in srgb, var(--o-warn) 40%, var(--o-border)); border-left-color: var(--o-warn); }
+.o-alert--danger { background: color-mix(in srgb, var(--o-danger) 10%, var(--o-surface)); border-color: color-mix(in srgb, var(--o-danger) 40%, var(--o-border)); border-left-color: var(--o-danger); }
