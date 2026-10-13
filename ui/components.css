@@ -300,3 +300,27 @@
 /* A spinner with its label, centred; or a scrim over a region (the parent needs position: relative). */
 .o-loading { display: flex; align-items: center; justify-content: center; gap: var(--o-space-3); padding: var(--o-space-5); color: var(--o-muted); }
 .o-loading--overlay { position: absolute; inset: 0; z-index: 10; background: var(--o-scrim); color: var(--o-text); }
+
+/* ---- Link tile ------------------------------------------------------- */
+/* A whole-tile link: hub app launchers, tool pickers, chapter lists. Put it in .o-tiles for a responsive grid. */
+.o-tiles { display: grid; gap: var(--o-space-3); margin: 0; padding: 0; list-style: none; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); }
+.o-tile {
+  display: flex; flex-direction: column; gap: var(--o-space-1); min-width: 0; min-height: var(--o-tap);
+  padding: var(--o-space-4); box-sizing: border-box;
+  background: var(--o-surface); color: var(--o-text); text-decoration: none;
+  border: 1px solid var(--o-border); border-radius: var(--o-radius-lg);
+  transition: border-color var(--o-dur) var(--o-ease), background var(--o-dur) var(--o-ease);
+}
+.o-tile > * { margin: 0; min-width: 0; }
+.o-tile__icon { font-size: 1.75rem; line-height: 1; }
+.o-tile__title { font-weight: 600; overflow-wrap: anywhere; }
+.o-tile__text { color: var(--o-muted); font-size: 0.875rem; overflow-wrap: anywhere; }
+.o-tile:focus-visible { outline: 2px solid var(--o-accent); outline-offset: 2px; }
+@media (hover: hover) {
+  .o-tile:hover { background: var(--o-surface-2); border-color: var(--o-accent); }
+}
+.o-tile[aria-current], .o-tile.is-active { border-color: var(--o-accent); box-shadow: inset 0 0 0 1px var(--o-accent); }
+.o-tile[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+/* Wide row layout: icon beside the text. */
+.o-tile--row { flex-direction: row; align-items: center; gap: var(--o-space-3); }
+.o-tile--row > .o-tile__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }

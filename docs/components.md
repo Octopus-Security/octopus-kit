@@ -120,3 +120,17 @@ it beside visible text and mark the ring `aria-hidden="true"`. Sizes `--sm`, def
 <span class="o-spinner" role="status" aria-label="Loading"></span>
 <div class="o-loading" role="status"><span class="o-spinner" aria-hidden="true"></span> Loading results...</div>
 ```
+
+## Link tile
+
+A whole-tile link for launchers, tool pickers and chapter lists. The anchor is the tile, so the entire
+box is the tap target and the title is the link text. Wrap tiles in `<ul class="o-tiles">` (auto-fills
+columns, one per row on the narrowest phones). `aria-current="page"` marks the current one,
+`aria-disabled="true"` greys one out and stops clicks. `--row` puts the icon beside the text.
+
+```html
+<ul class="o-tiles">
+  <li><a class="o-tile" href="/budget"><span class="o-tile__icon" aria-hidden="true">&#9889;</span><span class="o-tile__title">Budget</span><span class="o-tile__text">Track spending</span></a></li>
+  <li><a class="o-tile o-tile--row" href="/ch1"><span class="o-tile__icon" aria-hidden="true">&#128218;</span><span class="o-tile__body"><span class="o-tile__title">Chapter 1</span><span class="o-tile__text">12 problems</span></span></a></li>
+</ul>
+```
