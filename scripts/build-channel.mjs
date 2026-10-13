@@ -2,7 +2,7 @@
 // Builds the static LIVE CHANNEL output: everything an app loads from the kit host.
 //   node scripts/build-channel.mjs --out dist/channel     write <out>/v0/...
 //   node scripts/build-channel.mjs --check                build into a temp dir and validate only
-// Layout under /v0/: tokens.css accents.css base.css components.css theme-boot.js aliases/*.css
+// Layout under /v0/: tokens.css accents.css base.css components.css layout.css theme-boot.js aliases/*.css
 //   blocks/** manifest.json _/<hash8>/<name> (immutable, content-hashed copies)
 // Validation: every CSS file must tokenise (balanced braces/strings/comments) and every JS file
 // must parse (`node --check`; blocks as ES modules, theme-boot as a classic script).
@@ -35,6 +35,7 @@ export function channelFiles(root = ROOT) {
     ['accents.css', 'tokens/accents.css'],
     ['base.css', 'ui/base.css'],
     ['components.css', 'ui/components.css'],
+    ['layout.css', 'ui/layout.css'],
     ['theme-boot.js', 'tokens/theme-boot.js'],
   ];
   for (const f of walk(join(root, 'tokens/aliases'))) if (f.endsWith('.css')) list.push([`aliases/${f}`, `tokens/aliases/${f}`]);

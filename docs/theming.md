@@ -125,6 +125,63 @@ one pass per file:
 
 Do health first: it is the smaller surface and has no money on it.
 
+## Canvas and React libraries that carry their own theme (tldraw and similar)
+
+The kit sets `data-theme` on `<html>` (`dark`, `light`, or `system`/unset), and a library with its own
+colour scheme has to be told. Resolve the effective mode, then watch the attribute. Plain JS:
+
+```js
+const root = document.documentElement;
+const mq = matchMedia('(prefers-color-scheme: light)');
+const effective = () => {                       // 'dark' | 'light'
+  const t = root.dataset.theme;
+  return t === 'light' || t === 'dark' ? t : (mq.matches ? 'light' : 'dark');
+};
+function follow(apply) {
+  apply(effective());
+  const run = () => apply(effective());
+  const mo = new MutationObserver(run);
+  mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  mq.addEventListener('change', run);
+  return () => { mo.disconnect(); mq.removeEventListener('change', run); };
+}
+```
+
+React, with tldraw (`useEffect` returns the cleanup, so StrictMode and unmounts do not leak):
+
+```jsx
+useEffect(() => follow((mode) => editor.user.updateUserPreferences({ colorScheme: mode })), [editor]);
+```
+
+For a library with no theme API, set its colours from the tokens instead of copying hex values:
+`getComputedStyle(root).getPropertyValue('--o-surface')`, read again inside `apply`. Wrap a drawing surface in
+`.o-nofit` (docs/layout.md) so the kit's `svg { max-width: 100% }` does not squeeze it.
+
+## `<meta name="theme-color">` from the tokens
+
+Browsers tint their address bar from this tag. A hard-coded value is wrong in half the modes, so write it from
+the token and keep it in step with the theme:
+
+```html
+<meta name="theme-color" content="#0f1115"> <!-- first-paint fallback; the script below replaces it -->
+<script>
+(function () {
+  var root = document.documentElement, mq = matchMedia('(prefers-color-scheme: light)');
+  function sync() {
+    var c = getComputedStyle(root).getPropertyValue('--o-surface').trim();   // or --o-bg
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (!m) { m = document.createElement('meta'); m.name = 'theme-color'; document.head.appendChild(m); }
+    if (c) m.content = c;
+  }
+  sync();                                      // after tokens.css has loaded; put it at the end of <head> or defer it
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['data-theme', 'data-app'] });
+  mq.addEventListener('change', sync);
+})();
+</script>
+```
+
+Token values are plain hex, which is what the meta tag needs. Do not use `color-mix` or a `var()` here.
+
 ## Accent registry
 
 `tokens/accents.json` is the registry: `slug -> { name, dark: {accent, hover, ink}, light: {...} }`.

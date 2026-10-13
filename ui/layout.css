@@ -1,0 +1,214 @@
+/* octopus-kit ui/layout.css — responsive layout. Mobile-first; tokens only. Optional: link it after components.css.
+
+   BREAKPOINTS. A custom property cannot appear in a media query, so the four values are written out
+   below and kept equal to --o-bp-sm|md|lg|xl in tokens/tokens.css by a test. Use ONLY these, always as
+   min-width, and the apps' twenty-odd private breakpoints (340 ... 1600) can go.
+
+   @custom-media --o-sm (min-width: 480px);    large phone, and the point .o-table--cards turns back into a table
+   @custom-media --o-md (min-width: 768px);    tablet: .o-shell's drawer becomes a sidebar, .o-modal stops being a sheet
+   @custom-media --o-lg (min-width: 1024px);   desktop
+   @custom-media --o-xl (min-width: 1280px);   wide desktop
+
+   The shell, page and sheets pad themselves with env(safe-area-inset-*), which is only non-zero when the
+   page's viewport meta carries viewport-fit=cover (docs/layout.md). */
+
+/* ---- Screen: a full-height box that survives mobile browser chrome ---- */
+.o-screen { min-height: 100vh; min-height: 100dvh; }
+.o-screen--fixed { height: 100vh; height: 100dvh; overflow: hidden; }
+
+/* ---- Page: the content container ------------------------------------- */
+.o-page {
+  box-sizing: border-box; width: 100%; min-width: 0; max-width: var(--o-page-max);
+  margin-inline: auto;
+  padding-block: var(--o-space-4);
+  padding-inline: max(clamp(var(--o-space-3), 4vw, var(--o-space-6)), env(safe-area-inset-left, 0px)) max(clamp(var(--o-space-3), 4vw, var(--o-space-6)), env(safe-area-inset-right, 0px));
+  overflow-wrap: anywhere;
+}
+.o-page :where(img, video, svg) { max-width: 100%; }
+.o-page :where(img, video) { height: auto; }
+.o-page pre { max-width: 100%; overflow-x: auto; overflow-wrap: normal; word-break: normal; }
+.o-page pre code { overflow-wrap: normal; word-break: normal; }
+/* Tables keep their words whole, so a wide one scrolls in .o-table-wrap instead of squeezing letter by letter. */
+.o-page .o-table { overflow-wrap: normal; word-break: normal; }
+/* Opt-out for a canvas or a drawing library that sizes its own SVG/img (tldraw needs this). */
+.o-nofit :where(img, video, svg) { max-width: none; }
+
+/* ---- Primitives ------------------------------------------------------- */
+/* .o-stack (vertical rhythm) lives in base.css; these only change its gap. */
+.o-stack--sm > * + * { margin-top: var(--o-space-2); }
+.o-stack--lg > * + * { margin-top: var(--o-space-6); }
+.o-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--o-space-3); }
+.o-cluster--end { justify-content: flex-end; }
+.o-cluster--between { justify-content: space-between; }
+.o-cluster > *, .o-grid > *, .o-stack > * { min-width: 0; }
+.o-grid { display: grid; gap: var(--o-space-4); grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); }
+.o-grid--sm { grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr)); }
+.o-grid--lg { grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr)); }
+
+/* ---- Shell: header + nav + main --------------------------------------- */
+.o-shell {
+  position: relative; display: grid;
+  grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr;
+  grid-template-areas: "header" "main";
+  min-height: 100vh; min-height: 100dvh;
+  background: var(--o-bg); color: var(--o-text);
+}
+/* The checkbox is the whole mechanism without JS: it is visually hidden but stays focusable. */
+.o-shell__toggle { position: absolute; top: 0; left: 0; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.o-shell__header {
+  grid-area: header; position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: var(--o-space-2); min-width: 0;
+  padding: calc(var(--o-space-2) + env(safe-area-inset-top, 0px)) max(var(--o-space-3), env(safe-area-inset-right, 0px)) var(--o-space-2) max(var(--o-space-3), env(safe-area-inset-left, 0px));
+  background: var(--o-surface); border-bottom: 1px solid var(--o-border);
+}
+.o-shell__brand { font-weight: 700; color: var(--o-accent); text-decoration: none; white-space: nowrap; }
+.o-shell__spacer { flex: 1 1 auto; }
+.o-shell__main { grid-area: main; min-width: 0; }
+.o-shell__menu-btn, .o-shell__close {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  min-width: var(--o-tap); min-height: var(--o-tap); border-radius: var(--o-radius-md);
+  color: var(--o-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.o-shell__menu-icon { display: block; width: 1.25rem; height: 2px; background: currentColor; box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor; }
+.o-shell__close::before, .o-shell__close::after { content: ""; position: absolute; width: 1.25rem; height: 2px; background: currentColor; transform: rotate(45deg); }
+.o-shell__close::after { transform: rotate(-45deg); }
+.o-shell__close { position: relative; }
+.o-shell__toggle:focus-visible ~ .o-shell__header .o-shell__menu-btn,
+.o-shell__toggle:focus-visible ~ .o-shell__nav .o-shell__close { outline: 2px solid var(--o-accent); outline-offset: 2px; }
+.o-shell__nav-head { display: flex; align-items: center; justify-content: space-between; gap: var(--o-space-2); margin-bottom: var(--o-space-2); }
+
+/* Below md the nav is an off-canvas drawer. visibility:hidden takes it out of the tab order and the
+   accessibility tree while closed, so no script is needed for that. */
+.o-shell__nav {
+  grid-area: nav; position: fixed; top: 0; bottom: 0; left: 0; z-index: 1200;
+  display: flex; flex-direction: column; gap: var(--o-space-1);
+  width: min(var(--o-nav-w), 85vw); overflow-y: auto; overscroll-behavior: contain;
+  padding: calc(var(--o-space-3) + env(safe-area-inset-top, 0px)) var(--o-space-3) calc(var(--o-space-3) + env(safe-area-inset-bottom, 0px)) max(var(--o-space-3), env(safe-area-inset-left, 0px));
+  background: var(--o-surface); border-right: 1px solid var(--o-border); box-shadow: var(--o-shadow-2);
+  transform: translateX(-100%); visibility: hidden;
+  transition: transform var(--o-dur) var(--o-ease), visibility 0s linear var(--o-dur);
+}
+.o-shell__scrim {
+  position: fixed; inset: 0; z-index: 1150; background: var(--o-scrim);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--o-dur) var(--o-ease), visibility 0s linear var(--o-dur);
+}
+.o-shell__toggle:checked ~ .o-shell__nav { transform: none; visibility: visible; transition-delay: 0s; }
+.o-shell__toggle:checked ~ .o-shell__scrim { opacity: 1; visibility: visible; transition-delay: 0s; }
+body:has(.o-shell__toggle:checked) { overflow: hidden; }
+
+@media (hover: hover) {
+  .o-shell__menu-btn:hover, .o-shell__close:hover { background: var(--o-surface-2); color: var(--o-text); }
+}
+
+@media (min-width: 768px) {
+  .o-shell { grid-template-columns: var(--o-nav-w) minmax(0, 1fr); grid-template-areas: "nav header" "nav main"; }
+  .o-shell__toggle, .o-shell__menu-btn, .o-shell__close, .o-shell__scrim { display: none; }
+  .o-shell__nav {
+    position: sticky; top: 0; bottom: auto; align-self: start; z-index: auto;
+    height: 100vh; height: 100dvh; width: auto;
+    transform: none; visibility: visible; transition: none; box-shadow: none;
+  }
+  body:has(.o-shell__toggle:checked) { overflow: visible; }
+  .o-page { padding-block: var(--o-space-5); }
+
+  /* .o-shell--top: the same markup as a top bar instead of a sidebar. */
+  .o-shell--top { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto 1fr; grid-template-areas: "header" "nav" "main"; }
+  .o-shell--top .o-shell__nav {
+    position: static; align-self: stretch; height: auto; flex-direction: row; align-items: center; overflow-x: auto; overflow-y: visible;
+    padding: var(--o-space-1) max(var(--o-space-3), env(safe-area-inset-right, 0px)) var(--o-space-1) max(var(--o-space-3), env(safe-area-inset-left, 0px));
+    border-right: 0; border-bottom: 1px solid var(--o-border);
+  }
+  .o-shell--top .o-shell__nav-head { display: none; }
+  .o-shell--top .o-shell__nav .o-nav { flex-direction: row; }
+}
+
+/* .o-shell--contained: draw the shell inside a sized box (a preview, an iframe, an embedded app panel)
+   instead of the viewport. The drawer and scrim are positioned against the shell, not the screen. */
+.o-shell--contained { min-height: 0; height: 100%; overflow: hidden; grid-template-rows: auto minmax(0, 1fr); }
+.o-shell--contained .o-shell__header { position: static; }
+.o-shell--contained .o-shell__main { overflow: auto; }
+.o-shell--contained .o-shell__nav, .o-shell--contained .o-shell__scrim { position: absolute; }
+@media (min-width: 768px) {
+  .o-shell--contained .o-shell__nav { position: static; align-self: stretch; height: auto; }
+}
+
+/* ---- Tables ------------------------------------------------------------ */
+/* Horizontal scroll with an edge shadow wherever more is hidden. Give the wrapper tabind="0" and a label so
+   a keyboard can scroll it. The table is transparent here so the shadows, which live on the wrapper, show. */
+.o-table-wrap {
+  overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch;
+  border-radius: var(--o-radius-md); background-color: var(--o-surface);
+  background-image:
+    linear-gradient(to right, var(--o-surface), var(--o-surface)),
+    linear-gradient(to left, var(--o-surface), var(--o-surface)),
+    radial-gradient(farthest-side at 0 50%, color-mix(in srgb, var(--o-text) 28%, transparent), transparent),
+    radial-gradient(farthest-side at 100% 50%, color-mix(in srgb, var(--o-text) 28%, transparent), transparent);
+  background-position: left center, right center, left center, right center;
+  background-size: 1.5rem 100%, 1.5rem 100%, 0.75rem 100%, 0.75rem 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+.o-table-wrap > .o-table { background: transparent; }
+.o-table-wrap:focus-visible { outline: 2px solid var(--o-accent); outline-offset: 2px; }
+
+/* .o-table--cards: below sm every row becomes a card. Put data-label="Column name" on each <td>. */
+@media not all and (min-width: 480px) {
+  .o-table--cards, .o-table--cards tbody, .o-table--cards tr, .o-table--cards td, .o-table--cards th { display: block; }
+  .o-table--cards { background: transparent; border: 0; }
+  .o-table--cards thead { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .o-table--cards tr { margin-bottom: var(--o-space-3); overflow: hidden; background: var(--o-surface); border: 1px solid var(--o-border); border-radius: var(--o-radius-md); }
+  .o-table.o-table--cards tbody tr td {
+    display: flex; justify-content: space-between; align-items: baseline; gap: var(--o-space-3);
+    text-align: right; border-bottom: 1px solid var(--o-border);
+  }
+  .o-table.o-table--cards tbody tr td:last-child { border-bottom: 0; }
+  .o-table--cards td[data-label]::before {
+    content: attr(data-label); flex: 0 0 40%; max-width: 40%; text-align: left;
+    color: var(--o-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+}
+
+/* ---- Modal: a sheet below md, a centred dialog from md ------------------ */
+/* Works on <dialog class="o-modal"> (preferred: showModal() gives the backdrop, focus trap and Escape for
+   free) and on .o-modal inside .o-modal-scrim. A bare in-flow .o-modal is left alone. */
+dialog.o-modal, .o-modal-scrim > .o-modal {
+  width: 100%; max-width: 100%; margin: auto 0 0;
+  max-height: calc(100vh - var(--o-space-5) - env(safe-area-inset-top, 0px));
+  max-height: calc(100dvh - var(--o-space-5) - env(safe-area-inset-top, 0px));
+  overflow-y: auto; overscroll-behavior: contain;
+  padding: var(--o-space-5) max(var(--o-space-5), env(safe-area-inset-right, 0px)) calc(var(--o-space-5) + env(safe-area-inset-bottom, 0px)) max(var(--o-space-5), env(safe-area-inset-left, 0px));
+  border-radius: var(--o-radius-lg) var(--o-radius-lg) 0 0; border-bottom: 0;
+}
+dialog.o-modal { inset-inline: 0; }
+.o-modal-scrim { align-items: flex-end; padding: 0; }
+body:has(dialog.o-modal[open]) { overflow: hidden; }
+@media (min-width: 768px) {
+  dialog.o-modal, .o-modal-scrim > .o-modal {
+    max-width: min(32rem, calc(100vw - 2 * var(--o-space-4))); margin: auto; padding: var(--o-space-5);
+    max-height: calc(100vh - 2 * var(--o-space-4)); max-height: calc(100dvh - 2 * var(--o-space-4));
+    border-radius: var(--o-radius-lg); border-bottom: 1px solid var(--o-border);
+  }
+  dialog.o-modal.o-modal--wide, .o-modal-scrim > .o-modal.o-modal--wide { max-width: min(48rem, calc(100vw - 2 * var(--o-space-4))); }
+  .o-modal-scrim { align-items: center; padding: var(--o-space-4); }
+}
+
+/* ---- Fixed bars and toasts ---------------------------------------------- */
+/* A bar pinned to the bottom (or .o-fixed-bar--top). Add bottom padding to the page so it never hides the last row. */
+.o-fixed-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
+  display: flex; align-items: center; gap: var(--o-space-3);
+  padding: var(--o-space-3) max(var(--o-space-4), env(safe-area-inset-right, 0px)) calc(var(--o-space-3) + env(safe-area-inset-bottom, 0px)) max(var(--o-space-4), env(safe-area-inset-left, 0px));
+  background: var(--o-surface); color: var(--o-text); border-top: 1px solid var(--o-border); box-shadow: var(--o-shadow-2);
+}
+.o-fixed-bar--top {
+  top: 0; bottom: auto; border-top: 0; border-bottom: 1px solid var(--o-border);
+  padding-top: calc(var(--o-space-3) + env(safe-area-inset-top, 0px)); padding-bottom: var(--o-space-3);
+}
+/* Toasts: .o-toast-region (components.css) already keeps off the notch and home bar; on a phone it spans the width. */
+.o-toast-region { left: max(var(--o-space-4), env(safe-area-inset-left, 0px)); }
+.o-toast-region .o-toast { min-width: 0; }
+@media (min-width: 480px) {
+  .o-toast-region { left: auto; }
+  .o-toast-region .o-toast { min-width: 14rem; }
+}

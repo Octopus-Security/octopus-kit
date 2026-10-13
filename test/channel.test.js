@@ -13,7 +13,7 @@ test('channel builds, every file validates, manifest hashes match', async () => 
   const out = tmp();
   const { files, version } = buildChannel(out);
   assert.deepEqual(checkChannel(out), {});
-  for (const need of ['tokens.css', 'accents.css', 'base.css', 'components.css', 'theme-boot.js']) assert.ok(files[need], need);
+  for (const need of ['tokens.css', 'accents.css', 'base.css', 'components.css', 'layout.css', 'theme-boot.js', 'blocks/o-shell.js']) assert.ok(files[need], need);
   const m = JSON.parse(fs.readFileSync(path.join(out, 'v0/manifest.json'), 'utf8'));
   assert.equal(m.version, version);
   for (const [name, f] of Object.entries(files)) {
