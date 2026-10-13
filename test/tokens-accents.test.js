@@ -8,7 +8,7 @@ const acc = require('../tokens/accents.cjs');
 
 const root = path.join(__dirname, '..');
 const hub = [
-  'budget', 'health', 'planner', 'pass', 'xmpp', 'cortex', 'shopper', 'kitchen', 'ee', 'media', 'edm',
+  'budget', 'health', 'planner', 'studio', 'pass', 'xmpp', 'cortex', 'shopper', 'kitchen', 'ee', 'media', 'edm',
   'mma', 'games', 'math', 'science', 'tools', 'blog', 'code', 'business', 'marketing', 'ecom', 'author',
 ];
 const extra = ['dash'];

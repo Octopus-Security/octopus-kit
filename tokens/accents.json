@@ -297,5 +297,18 @@
    "hover": "#6b3dbe",
    "ink": "#ffffff"
   }
+ },
+ "studio": {
+  "name": "Studio",
+  "dark": {
+   "accent": "#a691d5",
+   "hover": "#bca7ec",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#7964a4",
+   "hover": "#65508e",
+   "ink": "#ffffff"
+  }
  }
 }

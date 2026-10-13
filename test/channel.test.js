@@ -42,3 +42,13 @@ test('the validator rejects broken CSS and broken JS', async () => {
   fs.writeFileSync(path.join(out, 'v0/blocks/bad.js'), 'export const = ;');
   assert.ok(checkChannel(out)['blocks/bad.js']);
 });
+
+test('kit host CORS regex: https subdomains of octopustechnology.net only', () => {
+  const conf = fs.readFileSync(path.join(__dirname, '..', 'channel', 'nginx.conf'), 'utf8');
+  const m = conf.match(/"~(\^https:[^"]+)"\s+\$http_origin;/);
+  assert.ok(m, 'no origin regex in channel/nginx.conf');
+  const re = new RegExp(m[1]); // nginx (PCRE) and JS agree on this subset
+  for (const ok of ['https://studio.octopustechnology.net', 'https://chat.octopustechnology.net', 'https://a.b.octopustechnology.net']) assert.ok(re.test(ok), ok);
+  for (const bad of ['https://evil.com', 'https://octopustechnology.net.evil.com', 'http://studio.octopustechnology.net', 'https://octopustechnology.net', 'https://evil.com/.octopustechnology.net', 'https://xoctopustechnology.net', 'https://studio.octopustechnology.net.evil.com'])
+    assert.ok(!re.test(bad), bad);
+});

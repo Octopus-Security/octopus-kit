@@ -22,6 +22,7 @@
 [data-app="planner"] { --o-accent: #7aa2f7; --o-accent-hover: #99bafd; --o-accent-ink: #0b0d10; } /* Planner */
 [data-app="science"] { --o-accent: #05dfe7; --o-accent-hover: #42f7fe; --o-accent-ink: #0b0d10; } /* Science */
 [data-app="shopper"] { --o-accent: #9db240; --o-accent-hover: #b3c958; --o-accent-ink: #0b0d10; } /* Shopper */
+[data-app="studio"] { --o-accent: #a691d5; --o-accent-hover: #bca7ec; --o-accent-ink: #0b0d10; } /* Studio */
 [data-app="tools"] { --o-accent: #dd9231; --o-accent-hover: #f5a84b; --o-accent-ink: #0b0d10; } /* Tools */
 [data-app="xmpp"] { --o-accent: #8bccfd; --o-accent-hover: #b9e0ff; --o-accent-ink: #0b0d10; } /* Messenger */
 
@@ -47,6 +48,7 @@
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="planner"] { --o-accent: #4f4dcc; --o-accent-hover: #3e36b4; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="science"] { --o-accent: #0e7b82; --o-accent-hover: #04656b; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="shopper"] { --o-accent: #5a6c00; --o-accent-hover: #485702; --o-accent-ink: #ffffff; }
+  :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="studio"] { --o-accent: #7964a4; --o-accent-hover: #65508e; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="tools"] { --o-accent: #936621; --o-accent-hover: #7e5200; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="xmpp"] { --o-accent: #0165af; --o-accent-hover: #03518e; --o-accent-ink: #ffffff; }
 }
@@ -72,5 +74,6 @@
 [data-theme="light"][data-app="planner"] { --o-accent: #4f4dcc; --o-accent-hover: #3e36b4; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="science"] { --o-accent: #0e7b82; --o-accent-hover: #04656b; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="shopper"] { --o-accent: #5a6c00; --o-accent-hover: #485702; --o-accent-ink: #ffffff; }
+[data-theme="light"][data-app="studio"] { --o-accent: #7964a4; --o-accent-hover: #65508e; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="tools"] { --o-accent: #936621; --o-accent-hover: #7e5200; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="xmpp"] { --o-accent: #0165af; --o-accent-hover: #03518e; --o-accent-ink: #ffffff; }
