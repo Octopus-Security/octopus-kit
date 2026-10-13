@@ -57,8 +57,9 @@ URL-encoded JSON, and nothing in it is sensitive:
   invalid one throws rather than producing broken markup.
   If the app has a CSP without nonces, serve `theme-boot.js` as a same-origin script
   (`<script src="/kit/theme-boot.js">`) and keep it first in `<head>` and not `async`.
-- **React/Vite**: inline it in `index.html` (a Vite plugin that reads `theme-boot.js`, or paste
-  it), import the CSS in `main.jsx`: `import 'octopus-kit/tokens/tokens.css'` etc.
+- **React/Vite**: use the kit's plugin, which inlines it in `index.html`
+  (`const { themeBoot } = createRequire(import.meta.url)('octopus-kit/tokens/vite-plugin.cjs')`,
+  `plugins: [react(), themeBoot()]`, and `<!-- octopus-kit:theme-boot -->` in `<head>`), then import the CSS in `main.jsx`: `import 'octopus-kit/tokens/tokens.css'` etc.
   Set `data-app` in `index.html`.
 - **Tailwind**: `presets: [require('octopus-kit/tokens/tailwind-preset.cjs')]`. It maps `bg`,
   `surface` (+ `-2`, `-3`), `border`, `text`, `muted`, `accent`, `success`, `warn`, `danger`,

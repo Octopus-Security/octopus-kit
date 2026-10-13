@@ -1,0 +1,16 @@
+# Portainer stack: git repo Octopus-Security/octopus-kit, reference refs/heads/channel/v0,
+# compose path channel/docker-compose.yml, auto-update ON. No host ports; the proxy reaches it by
+# service name on web_proxy (placeholder name, see docs/delivery.md).
+services:
+  kit-host:
+    build:
+      context: ..
+      dockerfile: channel/Dockerfile
+    container_name: octopus_kit_host_internal
+    restart: always
+    networks:
+      - web_proxy
+
+networks:
+  web_proxy:
+    external: true

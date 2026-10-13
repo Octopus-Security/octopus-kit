@@ -299,8 +299,8 @@ for (const profile of ['ui', 'headless']) {
     generate({ slug: 'demo', name: 'Demo App', profile, dir });
     const r = spawnSync(process.execPath, ['--test', 'test/*.test.js'], { cwd: dir, encoding: 'utf8', timeout: 90000, env: { PATH: process.env.PATH, NODE_PATH: nodePath() } });
     assert.strictEqual(r.status, 0, `${r.stdout}\n${r.stderr}`);
-    assert.match(r.stdout, /# pass [4-9]/);
-    assert.match(r.stdout, /# fail 0/);
+    assert.match(r.stdout, /(# |ℹ )pass [4-9]/);
+    assert.match(r.stdout, /(# |ℹ )fail 0/);
   });
 }
 
