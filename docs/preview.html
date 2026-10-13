@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="../ui/base.css">
 <link rel="stylesheet" href="../ui/components.css">
 <link rel="stylesheet" href="../ui/layout.css">
+<script type="module" src="../blocks/o-copy.js"></script>
+<script type="module" src="../blocks/o-dropzone.js"></script>
 <script type="module" src="../blocks/o-shell.js"></script>
 <style>
   .panel { background: var(--o-bg); color: var(--o-text); padding: var(--o-space-5); margin: var(--o-space-4) 0; border: 1px solid var(--o-border); border-radius: var(--o-radius-lg); }
@@ -83,6 +85,254 @@
     </div>
   </div>
 </section>
+<h2>More components</h2>
+<p class="o-muted">Markup for each is in <code>docs/components.md</code>. Dark left, light right on a wide screen.</p>
+<h3>Stat tile (.o-stats, .o-stat)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<dl class="o-stats">
+  <div class="o-stat"><dt class="o-stat__label">Spend</dt><dd class="o-stat__value">$12.40</dd><dd class="o-stat__sub">this month</dd></div>
+  <div class="o-stat o-stat--pos"><dt class="o-stat__label">Net</dt><dd class="o-stat__value">$35.60</dd><dd class="o-stat__sub">+8% on last week</dd></div>
+  <div class="o-stat o-stat--neg"><dt class="o-stat__label">Refunds</dt><dd class="o-stat__value">-$4.00</dd></div>
+  <div class="o-stat o-stat--accent o-stat--center"><dt class="o-stat__label">Uptime</dt><dd class="o-stat__value">3d 4h</dd></div>
+</dl>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<dl class="o-stats">
+  <div class="o-stat"><dt class="o-stat__label">Spend</dt><dd class="o-stat__value">$12.40</dd><dd class="o-stat__sub">this month</dd></div>
+  <div class="o-stat o-stat--pos"><dt class="o-stat__label">Net</dt><dd class="o-stat__value">$35.60</dd><dd class="o-stat__sub">+8% on last week</dd></div>
+  <div class="o-stat o-stat--neg"><dt class="o-stat__label">Refunds</dt><dd class="o-stat__value">-$4.00</dd></div>
+  <div class="o-stat o-stat--accent o-stat--center"><dt class="o-stat__label">Uptime</dt><dd class="o-stat__value">3d 4h</dd></div>
+</dl>
+</div>
+</div>
+<h3>Alert / callout (.o-alert)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <div class="o-alert" role="status"><div class="o-alert__body"><strong class="o-alert__title">Heads up.</strong> A plain note, tinted with the info tone.</div></div>
+  <div class="o-alert o-alert--success" role="status"><div class="o-alert__body">Settings saved.</div></div>
+  <div class="o-alert o-alert--warn" role="alert"><div class="o-alert__body"><strong class="o-alert__title">Not advice.</strong> General information only; check with a professional.</div></div>
+  <div class="o-alert o-alert--danger" role="alert">
+    <div class="o-alert__body"><strong class="o-alert__title">Could not save.</strong> Weight must be a number.</div>
+    <div class="o-alert__actions"><button class="o-btn o-btn--sm" type="button">Retry</button></div>
+  </div>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <div class="o-alert" role="status"><div class="o-alert__body"><strong class="o-alert__title">Heads up.</strong> A plain note, tinted with the info tone.</div></div>
+  <div class="o-alert o-alert--success" role="status"><div class="o-alert__body">Settings saved.</div></div>
+  <div class="o-alert o-alert--warn" role="alert"><div class="o-alert__body"><strong class="o-alert__title">Not advice.</strong> General information only; check with a professional.</div></div>
+  <div class="o-alert o-alert--danger" role="alert">
+    <div class="o-alert__body"><strong class="o-alert__title">Could not save.</strong> Weight must be a number.</div>
+    <div class="o-alert__actions"><button class="o-btn o-btn--sm" type="button">Retry</button></div>
+  </div>
+</div>
+</div>
+</div>
+<h3>Segmented control (.o-seg)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <div class="o-seg" role="group" aria-label="Effort">
+    <input class="o-seg__input" type="radio" name="demo-effort" id="demo-e1" checked><label class="o-seg__opt" for="demo-e1">Easy</label>
+    <input class="o-seg__input" type="radio" name="demo-effort" id="demo-e2"><label class="o-seg__opt" for="demo-e2">Medium</label>
+    <input class="o-seg__input" type="radio" name="demo-effort" id="demo-e3"><label class="o-seg__opt" for="demo-e3">Hard</label>
+  </div>
+  <div class="o-seg o-seg--block" role="group" aria-label="View">
+    <button class="o-seg__opt" type="button" aria-pressed="true">List</button>
+    <button class="o-seg__opt" type="button" aria-pressed="false">Grid</button>
+  </div>
+  <nav class="o-seg" aria-label="Section"><a class="o-seg__opt" href="#" aria-current="page">Lessons</a><a class="o-seg__opt" href="#">Practice</a></nav>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <div class="o-seg" role="group" aria-label="Effort">
+    <input class="o-seg__input" type="radio" name="demo-effort" id="demo-e1" checked><label class="o-seg__opt" for="demo-e1">Easy</label>
+    <input class="o-seg__input" type="radio" name="demo-effort" id="demo-e2"><label class="o-seg__opt" for="demo-e2">Medium</label>
+    <input class="o-seg__input" type="radio" name="demo-effort" id="demo-e3"><label class="o-seg__opt" for="demo-e3">Hard</label>
+  </div>
+  <div class="o-seg o-seg--block" role="group" aria-label="View">
+    <button class="o-seg__opt" type="button" aria-pressed="true">List</button>
+    <button class="o-seg__opt" type="button" aria-pressed="false">Grid</button>
+  </div>
+  <nav class="o-seg" aria-label="Section"><a class="o-seg__opt" href="#" aria-current="page">Lessons</a><a class="o-seg__opt" href="#">Practice</a></nav>
+</div>
+</div>
+</div>
+<h3>Meter (.o-meter)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-stack">
+  <div class="o-meter"><div class="o-meter__head"><label class="o-meter__label" for="demo-m1">Upload</label><span class="o-meter__value">42%</span></div><progress class="o-meter__bar" id="demo-m1" value="42" max="100"></progress></div>
+  <div class="o-meter o-meter--warn"><div class="o-meter__head"><label class="o-meter__label" for="demo-m2">Monthly budget</label><span class="o-meter__value">$18 of $25</span></div><progress class="o-meter__bar" id="demo-m2" value="18" max="25"></progress></div>
+  <div class="o-meter o-meter--danger o-meter--sm"><div class="o-meter__head"><label class="o-meter__label" for="demo-m3">Disk</label><span class="o-meter__value">96%</span></div><progress class="o-meter__bar" id="demo-m3" value="96" max="100"></progress></div>
+  <div class="o-meter o-meter--success"><div class="o-meter__head"><label class="o-meter__label" for="demo-m4">Working</label></div><progress class="o-meter__bar" id="demo-m4" aria-label="Working"></progress></div>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-stack">
+  <div class="o-meter"><div class="o-meter__head"><label class="o-meter__label" for="demo-m1">Upload</label><span class="o-meter__value">42%</span></div><progress class="o-meter__bar" id="demo-m1" value="42" max="100"></progress></div>
+  <div class="o-meter o-meter--warn"><div class="o-meter__head"><label class="o-meter__label" for="demo-m2">Monthly budget</label><span class="o-meter__value">$18 of $25</span></div><progress class="o-meter__bar" id="demo-m2" value="18" max="25"></progress></div>
+  <div class="o-meter o-meter--danger o-meter--sm"><div class="o-meter__head"><label class="o-meter__label" for="demo-m3">Disk</label><span class="o-meter__value">96%</span></div><progress class="o-meter__bar" id="demo-m3" value="96" max="100"></progress></div>
+  <div class="o-meter o-meter--success"><div class="o-meter__head"><label class="o-meter__label" for="demo-m4">Working</label></div><progress class="o-meter__bar" id="demo-m4" aria-label="Working"></progress></div>
+</div>
+</div>
+</div>
+<h3>Empty state (.o-empty)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-empty o-empty--box">
+  <div class="o-empty__icon" aria-hidden="true">&#9744;</div>
+  <h3 class="o-empty__title">No entries yet</h3>
+  <p class="o-empty__text">Log your first one and it will show up here.</p>
+  <div class="o-empty__actions"><button class="o-btn o-btn--primary" type="button">Add entry</button></div>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-empty o-empty--box">
+  <div class="o-empty__icon" aria-hidden="true">&#9744;</div>
+  <h3 class="o-empty__title">No entries yet</h3>
+  <p class="o-empty__text">Log your first one and it will show up here.</p>
+  <div class="o-empty__actions"><button class="o-btn o-btn--primary" type="button">Add entry</button></div>
+</div>
+</div>
+</div>
+<h3>Accordion (.o-accordion)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-accordion">
+  <details class="o-accordion__item" name="demo-acc" open>
+    <summary class="o-accordion__summary">Check the 3.3V rail</summary>
+    <div class="o-accordion__body"><p>Confirms the regulator works before you plug in the board.</p><ol><li>Set the meter to DC volts.</li><li>Touch the leads to the pins.</li></ol></div>
+  </details>
+  <details class="o-accordion__item" name="demo-acc">
+    <summary class="o-accordion__summary">Continuity test</summary>
+    <div class="o-accordion__body"><p>Only one panel is open at a time, because both share a name.</p></div>
+  </details>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-accordion">
+  <details class="o-accordion__item" name="demo-acc" open>
+    <summary class="o-accordion__summary">Check the 3.3V rail</summary>
+    <div class="o-accordion__body"><p>Confirms the regulator works before you plug in the board.</p><ol><li>Set the meter to DC volts.</li><li>Touch the leads to the pins.</li></ol></div>
+  </details>
+  <details class="o-accordion__item" name="demo-acc">
+    <summary class="o-accordion__summary">Continuity test</summary>
+    <div class="o-accordion__body"><p>Only one panel is open at a time, because both share a name.</p></div>
+  </details>
+</div>
+</div>
+</div>
+<h3>Spinner (.o-spinner, .o-loading)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-cluster">
+  <span class="o-spinner o-spinner--sm" role="status" aria-label="Loading"></span>
+  <span class="o-spinner" role="status" aria-label="Loading"></span>
+  <span class="o-spinner o-spinner--lg" role="status" aria-label="Loading"></span>
+  <div class="o-loading" role="status"><span class="o-spinner" aria-hidden="true"></span> Loading results...</div>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-cluster">
+  <span class="o-spinner o-spinner--sm" role="status" aria-label="Loading"></span>
+  <span class="o-spinner" role="status" aria-label="Loading"></span>
+  <span class="o-spinner o-spinner--lg" role="status" aria-label="Loading"></span>
+  <div class="o-loading" role="status"><span class="o-spinner" aria-hidden="true"></span> Loading results...</div>
+</div>
+</div>
+</div>
+<h3>Link tile (.o-tiles, .o-tile)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<ul class="o-tiles">
+  <li><a class="o-tile" href="#"><span class="o-tile__icon" aria-hidden="true">&#9889;</span><span class="o-tile__title">Budget</span><span class="o-tile__text">Track spending</span></a></li>
+  <li><a class="o-tile" href="#" aria-current="page"><span class="o-tile__icon" aria-hidden="true">&#127947;</span><span class="o-tile__title">Health</span><span class="o-tile__text">Workouts and meals</span></a></li>
+  <li><a class="o-tile" href="#" aria-disabled="true"><span class="o-tile__icon" aria-hidden="true">&#128274;</span><span class="o-tile__title">Locked</span><span class="o-tile__text">Not included</span></a></li>
+  <li><a class="o-tile o-tile--row" href="#"><span class="o-tile__icon" aria-hidden="true">&#128218;</span><span class="o-tile__body"><span class="o-tile__title">Chapter 1</span><span class="o-tile__text">12 problems</span></span></a></li>
+</ul>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<ul class="o-tiles">
+  <li><a class="o-tile" href="#"><span class="o-tile__icon" aria-hidden="true">&#9889;</span><span class="o-tile__title">Budget</span><span class="o-tile__text">Track spending</span></a></li>
+  <li><a class="o-tile" href="#" aria-current="page"><span class="o-tile__icon" aria-hidden="true">&#127947;</span><span class="o-tile__title">Health</span><span class="o-tile__text">Workouts and meals</span></a></li>
+  <li><a class="o-tile" href="#" aria-disabled="true"><span class="o-tile__icon" aria-hidden="true">&#128274;</span><span class="o-tile__title">Locked</span><span class="o-tile__text">Not included</span></a></li>
+  <li><a class="o-tile o-tile--row" href="#"><span class="o-tile__icon" aria-hidden="true">&#128218;</span><span class="o-tile__body"><span class="o-tile__title">Chapter 1</span><span class="o-tile__text">12 problems</span></span></a></li>
+</ul>
+</div>
+</div>
+<h3>Code input (.o-code)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <label class="o-label" for="demo-otp">Authenticator code</label>
+  <input class="o-input o-code" id="demo-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="000000">
+  <label class="o-label" for="demo-rec">Recovery code</label>
+  <input class="o-input o-code o-code--wide" id="demo-rec" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX">
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <label class="o-label" for="demo-otp">Authenticator code</label>
+  <input class="o-input o-code" id="demo-otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="000000">
+  <label class="o-label" for="demo-rec">Recovery code</label>
+  <input class="o-input o-code o-code--wide" id="demo-rec" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX">
+</div>
+</div>
+</div>
+<h3>Full-width button (.o-btn--block)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <button class="o-btn o-btn--primary o-btn--block" type="button">Continue</button>
+  <a class="o-btn o-btn--block" href="#">Back to sign in</a>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <button class="o-btn o-btn--primary o-btn--block" type="button">Continue</button>
+  <a class="o-btn o-btn--block" href="#">Back to sign in</a>
+</div>
+</div>
+</div>
+<h3>File dropzone (.o-dropzone)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<label class="o-dropzone">
+  <input class="o-dropzone__input" type="file" accept="image/*" aria-describedby="demo-dz-hint">
+  <span class="o-dropzone__title">Drop a file here or tap to choose</span>
+  <span class="o-dropzone__hint" id="demo-dz-hint">PNG or JPG, up to 5 MB</span>
+  <span class="o-dropzone__files" aria-live="polite"></span>
+</label>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<label class="o-dropzone">
+  <input class="o-dropzone__input" type="file" accept="image/*" aria-describedby="demo-dz-hint">
+  <span class="o-dropzone__title">Drop a file here or tap to choose</span>
+  <span class="o-dropzone__hint" id="demo-dz-hint">PNG or JPG, up to 5 MB</span>
+  <span class="o-dropzone__files" aria-live="polite"></span>
+</label>
+</div>
+</div>
+<h3>Copy box (.o-copy)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <div class="o-copy"><code class="o-copy__text" id="demo-copy1">octo-4F7K-92QX</code><button class="o-btn o-copy__btn" type="button" data-o-copy="#demo-copy1">Copy</button></div>
+  <div class="o-copy o-copy--wrap"><code class="o-copy__text">https://example.com/a/really/long/invite/link/that/wraps/instead/of/scrolling</code><button class="o-btn o-copy__btn" type="button" data-o-copy>Copy</button></div>
+</div>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<div class="o-stack o-stack--sm">
+  <div class="o-copy"><code class="o-copy__text" id="demo-copy1">octo-4F7K-92QX</code><button class="o-btn o-copy__btn" type="button" data-o-copy="#demo-copy1">Copy</button></div>
+  <div class="o-copy o-copy--wrap"><code class="o-copy__text">https://example.com/a/really/long/invite/link/that/wraps/instead/of/scrolling</code><button class="o-btn o-copy__btn" type="button" data-o-copy>Copy</button></div>
+</div>
+</div>
+</div>
 <h2>Layout</h2>
 <p class="o-muted">From <code>ui/layout.css</code>. <strong>View this page at 390, 768 and 1280 px wide</strong> (browser responsive mode): the shell drawer becomes a sidebar at 768, the cards below become a table at 480, and the dialog stops being a bottom sheet at 768. Breakpoints: sm 480, md 768, lg 1024, xl 1280.</p>
 <section class="panel" data-theme="dark" data-app="cortex">

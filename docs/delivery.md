@@ -44,6 +44,8 @@ optional files, then the app's own CSS.
 
   <!-- 3. LIVE blocks, progressive enhancement only (an unknown custom element renders its children) -->
   <script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-shell.js"></script>  <!-- drawer: Escape, focus; the shell works without it -->
+  <script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-dropzone.js"></script>  <!-- optional: dropzone highlight and file names (docs/components.md) -->
+  <script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-copy.js"></script>  <!-- optional: the Copy button in .o-copy -->
 </head>
 ```
 
