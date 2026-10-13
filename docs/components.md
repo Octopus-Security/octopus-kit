@@ -134,3 +134,15 @@ columns, one per row on the narrowest phones). `aria-current="page"` marks the c
   <li><a class="o-tile o-tile--row" href="/ch1"><span class="o-tile__icon" aria-hidden="true">&#128218;</span><span class="o-tile__body"><span class="o-tile__title">Chapter 1</span><span class="o-tile__text">12 problems</span></span></a></li>
 </ul>
 ```
+
+## Code input
+
+A one-time or recovery code field. It is an ordinary `.o-input` (16px, 44px tall) with `.o-code` added for
+the monospaced, widely spaced, centred look. For a numeric 2FA code use `inputmode="numeric"`,
+`autocomplete="one-time-code"` (so phones offer the code from a message) and `maxlength`. `--wide` tightens the
+spacing for longer alphanumeric codes.
+
+```html
+<label class="o-label" for="otp">Authenticator code</label>
+<input class="o-input o-code" id="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="000000">
+```

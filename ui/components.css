@@ -324,3 +324,9 @@
 /* Wide row layout: icon beside the text. */
 .o-tile--row { flex-direction: row; align-items: center; gap: var(--o-space-3); }
 .o-tile--row > .o-tile__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+/* ---- Code input ------------------------------------------------------ */
+/* For 2FA, recovery and invite codes: monospaced, spaced out, centred. Add the .o-input class too. */
+.o-code { font-family: var(--o-font-mono); letter-spacing: 0.3em; text-align: center; text-transform: none; font-variant-numeric: tabular-nums; }
+.o-code::placeholder { letter-spacing: 0.3em; }
+.o-code--wide { letter-spacing: 0.12em; }
