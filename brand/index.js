@@ -13,6 +13,7 @@ module.exports = {
   emojiSvg,
   MAX_CODE_POINTS,
   buildPack: pack.buildPack,
+  fileRecord: pack.fileRecord,
   validatePack: pack.validatePack,
   canonicalForm: pack.canonicalForm,
   packId: pack.packId,

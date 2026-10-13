@@ -109,9 +109,11 @@ function fileRecord({ path: filePath, role, type, data, encoding, width, height 
  * buildPack({ slug, name, emoji, theme, generator, createdAt })  — the one-file emoji pack
  * buildPack({ slug, name, svg,   theme, generator, createdAt })  — a sanitised-SVG pack
  *
- * Produces exactly one file, role "favicon". Studio's producer builds the rest of the role
- * set directly (fileRecord-shaped objects pushed onto `.files`) and must run the result
- * through validatePack before offering it anywhere.
+ * Produces exactly one file, role "favicon". A producer that can rasterize (studio, via
+ * sharp) builds the rest of the role set by calling the EXPORTED `fileRecord` and pushing
+ * the results onto `.files`, then runs the whole thing through validatePack. Use that
+ * export rather than assembling the record by hand: `bytes`, `sha256` and `encoding` feed
+ * `packId`, so a second implementation that drifts produces packs this one rejects.
  */
 function buildPack({ slug, name, emoji, svg, theme, generator, createdAt } = {}) {
   if (!isStr(slug) || !SLUG_RE.test(slug)) throw new Error(`buildPack: slug must match ${SLUG_RE}`);
@@ -330,6 +332,6 @@ function webmanifest(pack, { baseUrl, name, themeColor } = {}) {
 
 module.exports = {
   FORMAT, VERSION, SLUG_RE, ROLES, ROLE_NAMES, PUBLIC_FILENAME,
-  buildPack, validatePack, canonicalForm, packId, packToDir, packFromDir, webmanifest,
-  sanitiseSvg,
+  buildPack, fileRecord, validatePack, canonicalForm, packId, packToDir, packFromDir,
+  webmanifest, sanitiseSvg,
 };
