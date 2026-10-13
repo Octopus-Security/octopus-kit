@@ -163,7 +163,7 @@ produces, byte for byte, the block every app wires in:
 ```html
 <link rel="icon" type="image/svg+xml" href="https://auth.octopustechnology.net/brand/health/favicon.svg">
 <link rel="apple-touch-icon" href="https://auth.octopustechnology.net/brand/health/apple-touch-icon.png">
-<link rel="manifest" href="https://auth.octopustechnology.net/brand/health/site.webmanifest" crossorigin="use-credentials">
+<link rel="manifest" href="https://auth.octopustechnology.net/brand/health/site.webmanifest" crossorigin="anonymous">
 ```
 
 An Express/EJS app that already depends on the kit renders `brandHead(slug)` from its layout

@@ -7,7 +7,7 @@ test('brandLinks returns the three link objects from the rollout spec, in render
   assert.deepStrictEqual(brandLinks('health'), [
     { rel: 'icon', type: 'image/svg+xml', href: 'https://auth.octopustechnology.net/brand/health/favicon.svg' },
     { rel: 'apple-touch-icon', href: 'https://auth.octopustechnology.net/brand/health/apple-touch-icon.png' },
-    { rel: 'manifest', href: 'https://auth.octopustechnology.net/brand/health/site.webmanifest', crossorigin: 'use-credentials' },
+    { rel: 'manifest', href: 'https://auth.octopustechnology.net/brand/health/site.webmanifest', crossorigin: 'anonymous' },
   ]);
 });
 
@@ -15,7 +15,7 @@ test('brandHead renders the exact three-line markup from the app rollout', () =>
   assert.strictEqual(brandHead('health'), [
     '<link rel="icon" type="image/svg+xml" href="https://auth.octopustechnology.net/brand/health/favicon.svg">',
     '<link rel="apple-touch-icon" href="https://auth.octopustechnology.net/brand/health/apple-touch-icon.png">',
-    '<link rel="manifest" href="https://auth.octopustechnology.net/brand/health/site.webmanifest" crossorigin="use-credentials">',
+    '<link rel="manifest" href="https://auth.octopustechnology.net/brand/health/site.webmanifest" crossorigin="anonymous">',
   ].join('\n'));
 });
 

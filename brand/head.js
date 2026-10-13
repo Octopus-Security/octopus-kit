@@ -29,7 +29,11 @@ function brandLinks(slug, { origin = DEFAULT_ORIGIN } = {}) {
   return [
     { rel: 'icon', type: 'image/svg+xml', href: `${base}/favicon.svg` },
     { rel: 'apple-touch-icon', href: `${base}/apple-touch-icon.png` },
-    { rel: 'manifest', href: `${base}/site.webmanifest`, crossorigin: 'use-credentials' },
+    // `anonymous`, never `use-credentials`. The brand routes are public and send
+    // `Access-Control-Allow-Origin: *`; a credentialed CORS request is incompatible
+    // with a wildcard ACAO, so `use-credentials` makes the manifest fail to load
+    // cross-origin — silently, with no symptom but a missing PWA manifest.
+    { rel: 'manifest', href: `${base}/site.webmanifest`, crossorigin: 'anonymous' },
   ];
 }
 
@@ -43,7 +47,7 @@ function linkTag(attrs) {
  *
  *   <link rel="icon" type="image/svg+xml" href="https://auth.octopustechnology.net/brand/health/favicon.svg">
  *   <link rel="apple-touch-icon" href="https://auth.octopustechnology.net/brand/health/apple-touch-icon.png">
- *   <link rel="manifest" href="https://auth.octopustechnology.net/brand/health/site.webmanifest" crossorigin="use-credentials">
+ *   <link rel="manifest" href="https://auth.octopustechnology.net/brand/health/site.webmanifest" crossorigin="anonymous">
  */
 function brandHead(slug, opts = {}) {
   return brandLinks(slug, opts).map(linkTag).join('\n');
