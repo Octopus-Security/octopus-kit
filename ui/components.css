@@ -333,3 +333,39 @@
 
 /* ---- Full-width button ----------------------------------------------- */
 .o-btn--block { display: flex; width: 100%; }
+
+/* ---- File dropzone --------------------------------------------------- */
+/* A <label> around a real file input stretched invisibly over the box: tapping opens the picker, and a
+   browser drop onto the input selects the file, all with no JS. blocks/o-dropzone.js is optional and adds
+   the .is-over highlight while dragging and a list of the chosen file names. */
+.o-dropzone {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--o-space-1);
+  min-height: 8rem; padding: var(--o-space-5) var(--o-space-4); box-sizing: border-box; text-align: center;
+  background: var(--o-surface); color: var(--o-muted);
+  border: 2px dashed var(--o-border); border-radius: var(--o-radius-lg);
+  transition: border-color var(--o-dur) var(--o-ease), background var(--o-dur) var(--o-ease);
+}
+.o-dropzone > * { margin: 0; max-width: 100%; }
+.o-dropzone__input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; opacity: 0; cursor: pointer; font-size: 16px; }
+.o-dropzone__title { color: var(--o-text); font-weight: 600; }
+.o-dropzone__hint { font-size: 0.875rem; }
+.o-dropzone__files { font-size: 0.875rem; color: var(--o-text); overflow-wrap: anywhere; }
+.o-dropzone:focus-within, .o-dropzone.is-over { border-color: var(--o-accent); background: var(--o-surface-2); }
+.o-dropzone:focus-within { outline: 2px solid var(--o-accent); outline-offset: 2px; }
+.o-dropzone.is-disabled { opacity: 0.55; pointer-events: none; }
+@media (hover: hover) {
+  .o-dropzone:hover { border-color: var(--o-accent); }
+}
+
+/* ---- Copy box -------------------------------------------------------- */
+/* A value in a box with a Copy button beside it. The text is select-all, so it works with no JS (long press
+   or click selects it); blocks/o-copy.js is optional and makes the button copy and say "Copied". */
+.o-copy { display: flex; align-items: stretch; gap: var(--o-space-2); min-width: 0; }
+.o-copy__text {
+  flex: 1 1 auto; min-width: 0; min-height: var(--o-tap); box-sizing: border-box; display: flex; align-items: center;
+  padding: var(--o-space-2) var(--o-space-3); overflow-x: auto; white-space: nowrap;
+  background: var(--o-bg); color: var(--o-text); border: 1px solid var(--o-border); border-radius: var(--o-radius-md);
+  font-family: var(--o-font-mono); font-size: max(16px, 0.9rem); user-select: all; -webkit-user-select: all;
+}
+.o-copy--wrap .o-copy__text { white-space: normal; overflow-wrap: anywhere; overflow-x: visible; }
+.o-copy__btn { flex: none; }

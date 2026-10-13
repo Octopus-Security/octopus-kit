@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="../ui/base.css">
 <link rel="stylesheet" href="../ui/components.css">
 <link rel="stylesheet" href="../ui/layout.css">
+<script type="module" src="../blocks/o-copy.js"></script>
+<script type="module" src="../blocks/o-dropzone.js"></script>
 <script type="module" src="../blocks/o-shell.js"></script>
 <style>
   .panel { background: var(--o-bg); color: var(--o-text); padding: var(--o-space-5); margin: var(--o-space-4) 0; border: 1px solid var(--o-border); border-radius: var(--o-radius-lg); }
@@ -295,6 +297,25 @@
   <button class="o-btn o-btn--primary o-btn--block" type="button">Continue</button>
   <a class="o-btn o-btn--block" href="#">Back to sign in</a>
 </div>
+</div>
+</div>
+<h3>File dropzone (.o-dropzone)</h3>
+<div class="grid">
+<div class="panel" data-theme="dark" data-app="cortex">
+<label class="o-dropzone">
+  <input class="o-dropzone__input" type="file" accept="image/*" aria-describedby="demo-dz-hint">
+  <span class="o-dropzone__title">Drop a file here or tap to choose</span>
+  <span class="o-dropzone__hint" id="demo-dz-hint">PNG or JPG, up to 5 MB</span>
+  <span class="o-dropzone__files" aria-live="polite"></span>
+</label>
+</div>
+<div class="panel" data-theme="light" data-app="cortex">
+<label class="o-dropzone">
+  <input class="o-dropzone__input" type="file" accept="image/*" aria-describedby="demo-dz-hint">
+  <span class="o-dropzone__title">Drop a file here or tap to choose</span>
+  <span class="o-dropzone__hint" id="demo-dz-hint">PNG or JPG, up to 5 MB</span>
+  <span class="o-dropzone__files" aria-live="polite"></span>
+</label>
 </div>
 </div>
 <h2>Layout</h2>

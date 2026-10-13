@@ -157,3 +157,21 @@ breakpoint rule.
 ```html
 <button class="o-btn o-btn--primary o-btn--block" type="submit">Continue</button>
 ```
+
+## File dropzone
+
+A dashed box around a real `<input type="file">`, which is stretched invisibly over the whole box. Tapping
+opens the picker, dropping a file onto it selects it, the box shows the focus ring from the keyboard, and it
+all works with no JavaScript. The optional `blocks/o-dropzone.js` adds the `.is-over` highlight while a file
+is dragged over and writes the chosen file names into `.o-dropzone__files`. Add `multiple` to the input to
+accept several. `.is-disabled` greys it out (also disable the input).
+
+```html
+<label class="o-dropzone">
+  <input class="o-dropzone__input" type="file" accept="image/*" aria-describedby="dz-hint">
+  <span class="o-dropzone__title">Drop a file here or tap to choose</span>
+  <span class="o-dropzone__hint" id="dz-hint">PNG or JPG, up to 5 MB</span>
+  <span class="o-dropzone__files" aria-live="polite"></span>
+</label>
+<script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-dropzone.js"></script>
+```
