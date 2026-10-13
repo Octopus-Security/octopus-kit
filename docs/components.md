@@ -75,3 +75,17 @@ and always put the figure in `.o-meter__value`.
   <progress class="o-meter__bar" id="budget" value="18" max="25"></progress>
 </div>
 ```
+
+## Empty state
+
+Centred "nothing here yet" with a reason and the action that fixes it. Everything but the title is optional.
+`--box` draws a dashed container for an empty list inside a page; `--sm` is for a narrow panel.
+
+```html
+<div class="o-empty o-empty--box">
+  <div class="o-empty__icon" aria-hidden="true">&#9744;</div>
+  <h3 class="o-empty__title">No entries yet</h3>
+  <p class="o-empty__text">Log your first one and it will show up here.</p>
+  <div class="o-empty__actions"><button class="o-btn o-btn--primary" type="button">Add entry</button></div>
+</div>
+```

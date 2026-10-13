@@ -242,3 +242,18 @@
 .o-meter--warn { --o-meter-fill: var(--o-warn); }
 .o-meter--danger { --o-meter-fill: var(--o-danger); }
 .o-meter--info { --o-meter-fill: var(--o-info); }
+
+/* ---- Empty state ----------------------------------------------------- */
+/* "Nothing here yet", centred, with an optional icon, a one-line reason and the action that fixes it. */
+.o-empty {
+  display: flex; flex-direction: column; align-items: center; gap: var(--o-space-2);
+  padding: var(--o-space-6) var(--o-space-4); text-align: center; color: var(--o-muted);
+}
+.o-empty > * { margin: 0; max-width: 100%; }
+.o-empty__icon { font-size: 2rem; line-height: 1; color: var(--o-dim); }
+.o-empty__title { color: var(--o-text); font-size: 1.1rem; font-weight: 600; }
+.o-empty__text { max-width: 32rem; overflow-wrap: anywhere; }
+.o-empty__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--o-space-2); margin-top: var(--o-space-2); }
+/* Boxed variant for an empty list inside a page. */
+.o-empty--box { background: var(--o-surface); border: 1px dashed var(--o-border); border-radius: var(--o-radius-lg); }
+.o-empty--sm { padding: var(--o-space-4); }
