@@ -330,3 +330,6 @@
 .o-code { font-family: var(--o-font-mono); letter-spacing: 0.3em; text-align: center; text-transform: none; font-variant-numeric: tabular-nums; }
 .o-code::placeholder { letter-spacing: 0.3em; }
 .o-code--wide { letter-spacing: 0.12em; }
+
+/* ---- Full-width button ----------------------------------------------- */
+.o-btn--block { display: flex; width: 100%; }

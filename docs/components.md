@@ -146,3 +146,14 @@ spacing for longer alphanumeric codes.
 <label class="o-label" for="otp">Authenticator code</label>
 <input class="o-input o-code" id="otp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*" placeholder="000000">
 ```
+
+## Full-width button
+
+`.o-btn--block` makes a button (or a link styled as one) fill its container: the submit button of a
+sign-in form, the action at the bottom of a card or a phone sheet. Combine with any other button modifier.
+To go full width only on a phone, put the button in a container that narrows, or add the class from your own
+breakpoint rule.
+
+```html
+<button class="o-btn o-btn--primary o-btn--block" type="submit">Continue</button>
+```
