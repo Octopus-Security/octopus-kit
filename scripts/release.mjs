@@ -58,6 +58,9 @@ step('npm test passes');
 
 const out = join(ROOT, 'dist/channel');
 const { files } = buildChannel(out);
+const REQUIRED = ['tokens.css', 'accents.css', 'base.css', 'components.css', 'layout.css', 'theme-boot.js', 'blocks/o-shell.js'];
+const missing = REQUIRED.filter((f) => !files[f]);
+if (missing.length) die(`channel is missing ${missing.join(', ')}.`);
 const bad = checkChannel(out);
 if (Object.keys(bad).length) { for (const [f, e] of Object.entries(bad)) console.error(`  INVALID ${f}: ${e.join('; ')}`); die('channel files do not parse.'); }
 step(`channel builds: ${Object.keys(files).length} files, all parse`);

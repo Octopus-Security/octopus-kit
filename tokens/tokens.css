@@ -34,6 +34,13 @@
   --o-font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
   --o-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --o-dur: 160ms;
+  --o-page-max: 72rem;
+  --o-nav-w: 16rem;
+  --o-tap: 44px;
+  --o-bp-sm: 480px;
+  --o-bp-md: 768px;
+  --o-bp-lg: 1024px;
+  --o-bp-xl: 1280px;
 }
 
 @media (prefers-color-scheme: light) {

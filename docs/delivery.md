@@ -2,7 +2,7 @@
 
 | Half | What | How it arrives | When an app changes |
 |---|---|---|---|
-| Live | tokens, accents, aliases, base/components CSS, `blocks/` components, a copy of theme-boot | `https://kit.octopustechnology.net/v0/...` | when a kit release is cut; **no app redeploy** |
+| Live | tokens, accents, aliases, base/components/layout CSS, `blocks/` components, a copy of theme-boot | `https://kit.octopustechnology.net/v0/...` | when a kit release is cut; **no app redeploy** |
 | Pinned | `octopus-kit/server` (and the scaffold) | codeload tarball at a tag, in `package.json` | when `scripts/bump-kit.mjs` is run and the app is merged and rebuilt |
 
 Breaking changes to the live half go to a new channel (`/v1/`), which an app opts into by changing
@@ -22,7 +22,7 @@ optional files, then the app's own CSS.
 ```html
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- and data-app="myapp" on the <html> element, as today -->
 
   <!-- 1. INLINE, never from the kit host. Express: <%- themeBoot %>.  Vite: themeBoot() plugin. -->
@@ -37,10 +37,13 @@ optional files, then the app's own CSS.
         onerror="this.onerror=null;this.href='/kit/ui/base.css'">
   <link rel="stylesheet" href="https://kit.octopustechnology.net/v0/components.css"
         onerror="this.onerror=null;this.href='/kit/ui/components.css'">
+  <!-- optional: the responsive layout layer (docs/layout.md) -->
+  <link rel="stylesheet" href="https://kit.octopustechnology.net/v0/layout.css"
+        onerror="this.onerror=null;this.href='/kit/ui/layout.css'">
   <link rel="stylesheet" href="/app.css">
 
   <!-- 3. LIVE blocks, progressive enhancement only (an unknown custom element renders its children) -->
-  <script type="module" src="https://kit.octopustechnology.net/v0/blocks/example.js"></script>
+  <script type="module" src="https://kit.octopustechnology.net/v0/blocks/o-shell.js"></script>  <!-- drawer: Escape, focus; the shell works without it -->
 </head>
 ```
 
