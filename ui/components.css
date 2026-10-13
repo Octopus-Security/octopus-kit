@@ -214,3 +214,31 @@
   .o-seg__opt:hover { color: var(--o-text); }
   .o-seg__opt[aria-pressed="true"]:hover, .o-seg__opt[aria-current]:hover, .o-seg__opt.is-active:hover, .o-seg__input:checked + .o-seg__opt:hover { color: var(--o-accent-ink); }
 }
+
+/* ---- Meter ----------------------------------------------------------- */
+/* A labelled bar built on a native <progress>: the value is an attribute, so there is no inline style (CSP
+   friendly) and assistive tech reads it for free. Tone is set on the wrapper; a progress with no value
+   attribute is indeterminate. Say the number in text too (.o-meter__value) so colour is never the signal. */
+.o-meter { display: block; min-width: 0; }
+.o-meter__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--o-space-3); margin-bottom: var(--o-space-1); font-size: 0.875rem; }
+.o-meter__label { color: var(--o-muted); min-width: 0; overflow-wrap: anywhere; }
+.o-meter__value { color: var(--o-text); font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.o-meter__bar {
+  -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 0.625rem; margin: 0; border: 0;
+  border-radius: 999px; overflow: hidden; background: var(--o-surface-3); color: var(--o-accent); /* the fill uses currentColor, so a tone only has to set color */
+}
+.o-meter__bar::-webkit-progress-bar { background: var(--o-surface-3); }
+.o-meter__bar::-webkit-progress-value { background: currentColor; border-radius: 999px; transition: width var(--o-dur) var(--o-ease); }
+.o-meter__bar::-moz-progress-bar { background: currentColor; border-radius: 999px; }
+.o-meter__bar:indeterminate { background: linear-gradient(90deg, var(--o-surface-3) 0 30%, currentColor 30% 60%, var(--o-surface-3) 60%) 0 0 / 200% 100%; animation: o-meter-slide 1.4s linear infinite; }
+@keyframes o-meter-slide { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .o-meter__bar:indeterminate { animation: none; }
+  .o-meter__bar::-webkit-progress-value { transition: none; }
+}
+.o-meter--sm .o-meter__bar { height: 0.375rem; }
+.o-meter--lg .o-meter__bar { height: 0.875rem; }
+.o-meter--success { --o-meter-fill: var(--o-success); }
+.o-meter--warn { --o-meter-fill: var(--o-warn); }
+.o-meter--danger { --o-meter-fill: var(--o-danger); }
+.o-meter--info { --o-meter-fill: var(--o-info); }

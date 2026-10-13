@@ -59,3 +59,19 @@ about four options, or long labels, should be a `.o-select` instead; the strip s
   <button class="o-seg__opt" type="button" aria-pressed="false">Grid</button>
 </div>
 ```
+
+## Meter
+
+A labelled bar for budgets, allowances, upload progress and strength. It is a native `<progress>`, so
+the value is an attribute (`value`, `max`), there is no inline style, and a screen reader announces it.
+Link the label with `for`/`id`. Leave `value` off for an indeterminate "working" bar. Pick the tone on the
+wrapper (`--success`, `--warn`, `--danger`, `--info`; default is the app accent) and size with `--sm`/`--lg`.
+Colour follows your data, not the component: choose the tone in your own code (for example warn above 80%),
+and always put the figure in `.o-meter__value`.
+
+```html
+<div class="o-meter o-meter--warn">
+  <div class="o-meter__head"><label class="o-meter__label" for="budget">Monthly budget</label><span class="o-meter__value">$18 of $25</span></div>
+  <progress class="o-meter__bar" id="budget" value="18" max="25"></progress>
+</div>
+```
