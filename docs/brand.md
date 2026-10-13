@@ -175,6 +175,25 @@ apps that cannot take a raw string. Both validate and reject a slug that fails
 escapes every attribute value it writes (defence in depth — the slug check alone already
 stops anything attribute-breaking from reaching it).
 
+## What validation does and does not prove
+
+`validatePack` proves a pack is **well-formed and un-tampered-with**: the roles are known,
+`favicon` is present, and every file's `sha256` and `bytes` actually match its `data`.
+
+It does **not** prove the pack is **safe**. Two things it deliberately leaves to the importer:
+
+- **SVG content.** `sanitiseSvg` runs inside `buildPack`, so a pack this library built is
+  clean. A pack arriving from anywhere else has not been through it. A hand-crafted pack
+  whose `favicon.svg` carries a `<script>` and a *correct* `sha256` passes every check, and
+  would then be served as `image/svg+xml` — which executes. **An import path must call the
+  exported `sanitiseSvg` on the favicon role itself**, before anything touches disk.
+- **File paths.** `path` is checked for being non-empty and unique, not for traversal. Guard
+  it before joining it to a directory; `packToDir` shows the guard.
+
+This split is deliberate — the format has to survive being handed between a browser tool, a
+CLI and an HTTP endpoint, so the trust boundary sits at the importer, not at the parser. Say
+so wherever a new consumer is written, because "it validated" reads like "it is safe".
+
 ## CLI — `bin/octopus-favicon-pack.mjs`
 
 ```sh

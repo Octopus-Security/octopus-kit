@@ -150,6 +150,14 @@ function buildPack({ slug, name, emoji, svg, theme, generator, createdAt } = {})
  * Strict and self-contained: format/version, slug shape, source/theme shape, the role
  * vocabulary, at most one file per role and the required `favicon` role, sha256/bytes/base64
  * actually matching `data`, and a declared `type` matching its role.
+ *
+ * It does NOT check SVG CONTENT, and it does NOT check a file's `path` for traversal.
+ * `sanitiseSvg` runs inside `buildPack`, so a pack this library built is clean — but a pack
+ * arriving from anywhere else has not been through it. A hand-crafted pack whose
+ * `favicon.svg` carries a <script> and a CORRECT sha256 passes every check here and would
+ * then be served as image/svg+xml. **Any import path must call `sanitiseSvg` on the favicon
+ * role itself, and must guard `path` before joining it to a directory** (see `packToDir`).
+ * Validation proves a pack is well-formed and un-tampered-with; it does not prove it is safe.
  */
 function validatePack(pack) {
   const errors = [];
