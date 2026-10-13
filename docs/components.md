@@ -108,3 +108,15 @@ Put `open` on an item to start it expanded. The summary is a full 44px tap targe
   </details>
 </div>
 ```
+
+## Spinner
+
+A ring in the accent colour. Always give it a text alternative: `role="status"` with `aria-label`, or put
+it beside visible text and mark the ring `aria-hidden="true"`. Sizes `--sm`, default, `--lg`. Under
+`prefers-reduced-motion` it pulses instead of spinning. `.o-loading` centres a spinner with a message;
+`.o-loading--overlay` covers a `position: relative` region while it loads.
+
+```html
+<span class="o-spinner" role="status" aria-label="Loading"></span>
+<div class="o-loading" role="status"><span class="o-spinner" aria-hidden="true"></span> Loading results...</div>
+```

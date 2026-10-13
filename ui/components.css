@@ -283,3 +283,20 @@
 .o-accordion__body > :first-child { margin-top: 0; }
 .o-accordion__body > :last-child { margin-bottom: 0; }
 @media (prefers-reduced-motion: reduce) { .o-accordion__summary::after { transition: none; } }
+
+/* ---- Spinner --------------------------------------------------------- */
+/* Put role="status" and a text label on it (visually hidden is fine). With reduced motion the ring stops
+   spinning and pulses its opacity instead, so it still reads as "busy". */
+.o-spinner {
+  display: inline-block; flex: none; width: 1.5rem; height: 1.5rem; vertical-align: middle;
+  border: 3px solid var(--o-surface-3); border-top-color: var(--o-accent); border-radius: 50%;
+  animation: o-spin 0.8s linear infinite;
+}
+.o-spinner--sm { width: 1rem; height: 1rem; border-width: 2px; }
+.o-spinner--lg { width: 2.5rem; height: 2.5rem; border-width: 4px; }
+@keyframes o-spin { to { transform: rotate(360deg); } }
+@keyframes o-pulse { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .o-spinner { animation: o-pulse 1.6s ease-in-out infinite; } }
+/* A spinner with its label, centred; or a scrim over a region (the parent needs position: relative). */
+.o-loading { display: flex; align-items: center; justify-content: center; gap: var(--o-space-3); padding: var(--o-space-5); color: var(--o-muted); }
+.o-loading--overlay { position: absolute; inset: 0; z-index: 10; background: var(--o-scrim); color: var(--o-text); }
