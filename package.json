@@ -1,6 +1,6 @@
 {
   "name": "octopus-kit",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Shared themes, server helpers, app manifest and scaffold for the octopus app suite",
   "license": "MIT",
   "type": "commonjs",
@@ -12,6 +12,7 @@
     "ui",
     "server",
     "manifest",
+    "brand",
     "bin",
     "blocks",
     "templates",
@@ -25,6 +26,7 @@
     "release": "node scripts/release.mjs"
   },
   "bin": {
-    "create-octopus-app": "bin/create-octopus-app.mjs"
+    "create-octopus-app": "bin/create-octopus-app.mjs",
+    "octopus-favicon-pack": "bin/octopus-favicon-pack.mjs"
   }
 }

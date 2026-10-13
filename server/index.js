@@ -17,6 +17,7 @@ const llm = require('./llm');
 const layout = require('./layout');
 const prefs = require('./prefs');
 const kitAssets = require('./kit-assets');
+const brand = require('../brand');
 
 const api = {
   createBuildStamp: buildStamp.createBuildStamp,
@@ -30,6 +31,7 @@ const api = {
   layout,
   prefs,
   kitAssets: kitAssets.kitAssets,
+  brand,
   modules: {
     resolve: layout.resolveModules, normalise: layout.normaliseModulePrefs,
     isEnabled: layout.isModuleEnabled, gate: layout.moduleGate,
