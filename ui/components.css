@@ -145,3 +145,27 @@
 }
 .o-tab[aria-selected="true"], .o-tab.is-active { color: var(--o-text); border-bottom-color: var(--o-accent); }
 .o-tabpanel { padding: var(--o-space-4) 0; }
+
+/* ---- Stat tile ------------------------------------------------------- */
+/* A label over a big number. Wrap tiles in .o-stats (a <dl>) for a grid that is two-up on a phone. */
+.o-stats { display: grid; gap: var(--o-space-3); margin: 0; padding: 0; grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr)); }
+.o-stat {
+  display: flex; flex-direction: column; gap: var(--o-space-1); min-width: 0;
+  padding: var(--o-space-3) var(--o-space-4);
+  background: var(--o-surface); color: var(--o-text);
+  border: 1px solid var(--o-border); border-radius: var(--o-radius-md);
+}
+.o-stat > * { margin: 0; min-width: 0; }
+.o-stat__label { color: var(--o-muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.o-stat__value {
+  font-size: 1.5rem; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+}
+.o-stat__sub { color: var(--o-muted); font-size: 0.8rem; }
+@media (min-width: 768px) { .o-stat__value { font-size: 1.875rem; } }
+.o-stat--accent .o-stat__value { color: var(--o-accent); }
+.o-stat--pos .o-stat__value { color: var(--o-success); }
+.o-stat--warn .o-stat__value { color: var(--o-warn); }
+.o-stat--neg .o-stat__value { color: var(--o-danger); }
+.o-stat--center { align-items: center; text-align: center; }
+/* No box, for a row of figures inside a card or a header. */
+.o-stat--flat { padding: 0; background: none; border: 0; border-radius: 0; }
