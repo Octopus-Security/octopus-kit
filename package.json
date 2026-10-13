@@ -1,6 +1,6 @@
 {
   "name": "octopus-kit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Shared themes, server helpers, app manifest and scaffold for the octopus app suite",
   "license": "MIT",
   "type": "commonjs",
