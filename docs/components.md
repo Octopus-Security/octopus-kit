@@ -39,3 +39,23 @@ a reaction to something (a disclosure, a legal note) needs no role.
 
 Tones: default (info), `--success`, `--warn`, `--danger`. `__title` and `__actions` are optional; with no
 actions the body fills the row. Use `.o-toast` for a message that appears over the page and goes away.
+
+## Segmented control
+
+One choice from a few, as a single joined pill. Three markups, one look: radios (works with no JS and
+submits with a form), buttons (you toggle `aria-pressed` yourself) and links (`aria-current="page"` on
+the current one). For radios the `<input>` comes **before** its `<label>`, which is what lets CSS style the
+label from `:checked`. `.o-seg--block` stretches it to the full width with equal segments. More than
+about four options, or long labels, should be a `.o-select` instead; the strip scrolls rather than wraps.
+
+```html
+<div class="o-seg" role="group" aria-label="Effort">
+  <input class="o-seg__input" type="radio" name="effort" id="e1" checked><label class="o-seg__opt" for="e1">Easy</label>
+  <input class="o-seg__input" type="radio" name="effort" id="e2"><label class="o-seg__opt" for="e2">Hard</label>
+</div>
+
+<div class="o-seg o-seg--block" role="group" aria-label="View">
+  <button class="o-seg__opt" type="button" aria-pressed="true">List</button>
+  <button class="o-seg__opt" type="button" aria-pressed="false">Grid</button>
+</div>
+```

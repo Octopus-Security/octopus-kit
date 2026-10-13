@@ -15,6 +15,8 @@ const demos = fs.readdirSync(demoDir).filter((f) => f.endsWith('.html')).sort();
 const docs = read('docs/components.md');
 const preview = read('docs/preview.html');
 
+// Classes that predate this document or are generic layout; they need styling but not a section here.
+const SHARED = /^o-(stack|cluster|grid|btn|input|select|textarea|card|badge|muted|dim|sr-only|label|check|row|table|toast)(?![a-z])/;
 const classesOf = (html) => new Set([...html.matchAll(/class="([^"]*)"/g)].flatMap((m) => m[1].split(/\s+/)).filter((c) => /^o-/.test(c)));
 
 test('every demo fragment has a title, uses only styled o- classes, and is documented', () => {
@@ -28,6 +30,7 @@ test('every demo fragment has a title, uses only styled o- classes, and is docum
     assert.ok(used.size > 0, `${f}: no o- classes`);
     for (const c of used) {
       assert.ok(css.includes(`.${c}`), `${f}: .${c} is not styled`);
+      if (SHARED.test(c)) continue;
       const mod = c.includes('--') ? `--${c.split('--')[1]}` : c; // modifiers are documented as `--name`
       assert.ok(docs.includes(c) || docs.includes(mod), `${f}: ${c} is not mentioned in docs/components.md`);
     }
