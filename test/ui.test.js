@@ -76,3 +76,17 @@ test('the preview page links the kit CSS and shows every component', () => {
     assert.ok(html.includes(cls), cls);
   }
 });
+
+test('layout & text rules: no grey overscroll, no mid-word breaks, tap targets', () => {
+  const base = strip(fs.readFileSync(path.join(uiDir, 'base.css'), 'utf8'));
+  assert.match(base, /html\s*\{[^}]*background:\s*var\(--o-bg\)/);
+  assert.match(base, /body\s*\{[^}]*overflow-x:\s*clip/);
+  assert.match(base, /body\s*\{[^}]*min-height:\s*100vh;\s*min-height:\s*100dvh/);
+  assert.match(base, /body\s*\{[^}]*overflow-wrap:\s*break-word;\s*hyphens:\s*manual/);
+  assert.match(base, /code, kbd \{[^}]*overflow-wrap:\s*anywhere[^}]*box-decoration-break:\s*clone/);
+  assert.match(base, /pre\s*\{[^}]*overflow-x:\s*auto/);
+  assert.match(base, /button[^{]*\{\s*min-height:\s*var\(--o-tap\)/);
+  for (const f of files) {
+    assert.doesNotMatch(strip(fs.readFileSync(path.join(uiDir, f), 'utf8')), /word-break:\s*break-all/, `${f}: break-all`);
+  }
+});

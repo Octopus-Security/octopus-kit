@@ -1,8 +1,16 @@
 /* octopus-kit ui/base.css — reset, typography and page defaults. Tokens only. */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+  /* html carries the background too: overscroll and rubber-band show html, not body, so a body-only
+     background leaves a default-grey bar at the bottom of a phone screen. */
+  background: var(--o-bg);
+}
 body {
   margin: 0;
+  min-height: 100vh; min-height: 100dvh;
+  overflow-x: clip;
+  overflow-wrap: break-word; hyphens: manual;
   background: var(--o-bg);
   color: var(--o-text);
   font-family: var(--o-font-sans);
@@ -24,10 +32,13 @@ small, .o-muted { color: var(--o-muted); }
 .o-dim { color: var(--o-dim); }
 hr { border: 0; border-top: 1px solid var(--o-border); margin: var(--o-space-5) 0; }
 code, kbd, pre, samp { font-family: var(--o-font-mono); font-size: 0.9em; }
-code, kbd { background: var(--o-surface-2); border: 1px solid var(--o-border); border-radius: var(--o-radius-sm); padding: 0.1em 0.4em; }
+/* Inline code only breaks mid-token when it has to (an email, a URL); it never breaks elsewhere. */
+code, kbd { overflow-wrap: anywhere; -webkit-box-decoration-break: clone; box-decoration-break: clone; background: var(--o-surface-2); border: 1px solid var(--o-border); border-radius: var(--o-radius-sm); padding: 0.1em 0.4em; }
 pre { background: var(--o-surface-2); border: 1px solid var(--o-border); border-radius: var(--o-radius-md); padding: var(--o-space-3) var(--o-space-4); overflow-x: auto; }
-pre code { background: none; border: 0; padding: 0; }
+pre code { background: none; border: 0; padding: 0; overflow-wrap: normal; }
 img, svg, video { max-width: 100%; }
+img, video { height: auto; }
+button, [type="button"], [type="submit"], [type="reset"] { min-height: var(--o-tap); }
 button, input, select, textarea { font: inherit; color: inherit; }
 ::selection { background: var(--o-accent); color: var(--o-accent-ink); }
 

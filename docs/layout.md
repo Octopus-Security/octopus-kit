@@ -174,3 +174,18 @@ URL bar moves. `.o-screen--fixed` fixes the height instead (app-like views that 
 3. Delete its own `100vh`, private breakpoints, per-page modal and `.rest-banner`-style fixed-bar CSS as it moves to the kit classes.
 4. Nothing in layout.css fires on its own: unclassed markup is unchanged. The one global change is components.css:
    controls are now 44px tall and inputs 16px, which can alter dense screens; use `.o-btn--sm` where a compact one is intended.
+
+## Layout & text rules
+
+The source of truth for every app in the estate. A rule changes here first; apps adopt it by bumping the kit tag. `ui/base.css` applies all of these to any app that links it, and `test/ui.test.js` fails if one is removed.
+
+1. **`html` and `body` both take `var(--o-bg)`.** Overscroll and rubber-band paint `html`; a body-only background shows as a grey bar at the bottom of a phone.
+2. **`body { overflow-x: clip }`.** A stray wide element must not make the page scroll sideways. Fix the element too; this is the safety net.
+3. **`min-height: 100vh; min-height: 100dvh`** on body (the second line wins where supported). Never a bare `100vh` for a full-height view; `.o-screen` does this.
+4. **Words stay whole.** Body text is `overflow-wrap: break-word; hyphens: manual`. Never `word-break: break-all`.
+5. **Inline `code`/`kbd` use `overflow-wrap: anywhere`** so a long token (an email, a URL) wraps instead of overflowing, with `box-decoration-break: clone` so the pill's border and padding repeat on each line. Prose around it is not broken.
+6. **Wide things scroll inside themselves.** `pre` scrolls (`overflow-x: auto`); tables go in `.o-table-wrap`. The page never scrolls sideways.
+7. **`img`, `video`, `svg` are `max-width: 100%`** (`height: auto` for img and video).
+8. **16px side gutter** (`--o-space-4`) from `.o-container` / `.o-page`; do not go below it on a phone.
+9. **44px minimum tap targets** (`--o-tap`) on buttons, nav links, tabs, checks; inputs are 16px font so iOS does not zoom.
+10. **A viewport meta with `width=device-width, initial-scale=1, viewport-fit=cover`** on every page.
