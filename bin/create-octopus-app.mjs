@@ -34,7 +34,7 @@ const KIT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const TEMPLATES = path.join(KIT_DIR, 'templates');
 const { validate, toHubJson } = require('../manifest/validate.js');
 
-export const KIT_REF = 'v0.1.0';
+export const KIT_REF = 'v0.5.0';
 export const KIT_DEP = `https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/${KIT_REF}`;
 export const PROFILES = ['ui', 'headless', 'static'];
 

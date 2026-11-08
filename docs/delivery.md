@@ -9,7 +9,7 @@ Breaking changes to the live half go to a new channel (`/v1/`), which an app opt
 its URLs. `/v0/` only ever receives backwards-compatible changes. The pinned form is:
 
 ```json
-"octopus-kit": "https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/v0.1.0"
+"octopus-kit": "https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/v0.5.0"
 ```
 
 (never `github:`, which needs `git`; `node:alpine` has none).
