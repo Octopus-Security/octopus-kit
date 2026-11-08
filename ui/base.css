@@ -44,6 +44,25 @@ button, input, select, textarea { font: inherit; color: inherit; }
    (it zooms any control under 16px, and the page then stays zoomed and scrolls sideways). */
 input, select, textarea { max-width: 100%; }
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), select, textarea { font-size: max(16px, 1rem); }
+/* Native controls follow the theme. Without `color-scheme` the browser draws select popups, date pickers and
+   scrollbars light even on a dark page, and a bare <select>/<input>/<textarea> renders in the browser's own
+   grey. color-scheme is set on the same selectors tokens.css uses for its modes. */
+:root, [data-theme="dark"] { color-scheme: dark; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]):not([data-theme="light"]) { color-scheme: light; }
+}
+[data-theme="light"] { color-scheme: light; }
+/* Default look for classless controls. :where() has specificity 0, so ANY app class (.o-input, an app's own
+   rule, even a bare `select {}`) wins. Checkbox, radio, range, color, file, hidden and button-like inputs keep
+   their native look. Font size stays with the 16px rule above. */
+:where(select, textarea, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"])) {
+  background: var(--o-surface-2);
+  color: var(--o-text);
+  border: 1px solid var(--o-border);
+  border-radius: var(--o-radius-md);
+  font: inherit;
+}
+:where(select) option { background: var(--o-surface-2); color: var(--o-text); }
 ::selection { background: var(--o-accent); color: var(--o-accent-ink); }
 
 /* One focus treatment for everything keyboard-reachable. */

@@ -193,6 +193,7 @@ The source of truth for every app in the estate. A rule changes here first; apps
 12. **Form controls are `max-width: 100%` and 16px.** Under 16px iOS Safari zooms on focus and the page stays zoomed; `base.css` sets `font-size: max(16px, 1rem)` on `input`, `select`, `textarea`.
 13. **`img`, `video`, `svg`, `canvas`, `iframe`, `embed`, `object` are `max-width: 100%`.** Give a fixed-size embed an aspect-ratio wrapper rather than a pixel width.
 14. **Minimum supported width is 320px.** Nothing may need more. No fixed pixel widths above ~300px on a block; use `min(Npx, 100%)`, `minmax(0, 1fr)` and `flex-wrap`. Grid/flex children that hold long text need `min-width: 0`.
+15. **Native controls follow the theme.** `base.css` declares `color-scheme` (`dark`/`light`) on the same selectors as the token modes, so select popups, date pickers and scrollbars match the theme. Classless `select`, `textarea` and text-like `input` get `--o-surface-2` / `--o-text` / `--o-border` / `--o-radius-md` through `:where(...)` (specificity 0, so any app class overrides it); checkbox, radio, range, color, file, hidden and button inputs are left native. Apps adopt it by bumping the kit tag.
 
 ### Checking it: the overflow checker
 

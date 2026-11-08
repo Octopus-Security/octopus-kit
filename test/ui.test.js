@@ -99,3 +99,48 @@ test('no sideways scroll from first load: controls, media and header rows are co
   assert.match(base, /\.o-header \{[^}]*flex-wrap:\s*wrap/);
   assert.match(base, /\.o-header > \*, \.o-row > \* \{ min-width: 0; \}/);
 });
+
+// ---- themed native form controls -------------------------------------------------------------
+const literalColour = (css) => {
+  const named = /(?<![\w-])(white|black|red|green|blue|yellow|orange|purple|pink|gray|grey|cyan|magenta|teal|navy)(?![\w-])\s*[;,)}]/i;
+  return /#[0-9a-fA-F]{3,8}\b/.test(css) || /\b(rgb|rgba|hsl|hsla|hwb|oklch|oklab|lab|lch)\(/i.test(css) || named.test(css);
+};
+const controlRule = (base) => {
+  const m = base.match(/(:where\(\s*select,[^{]*\))\s*\{([^}]*)\}/);
+  return m ? { selector: m[1], body: m[2] } : null;
+};
+
+test('color-scheme is declared for dark and light modes in base.css', () => {
+  const base = strip(fs.readFileSync(path.join(uiDir, 'base.css'), 'utf8'));
+  assert.match(base, /\[data-theme="dark"\][^{]*\{[^}]*color-scheme:\s*dark/);
+  assert.match(base, /\[data-theme="light"\][^{]*\{[^}]*color-scheme:\s*light/);
+  assert.match(base, /prefers-color-scheme:\s*light\)[^]*?color-scheme:\s*light/);
+});
+
+test('native controls get a zero-specificity themed default via :where()', () => {
+  const base = strip(fs.readFileSync(path.join(uiDir, 'base.css'), 'utf8'));
+  const rule = controlRule(base);
+  assert.ok(rule, 'no :where(select, ...) control rule');
+  assert.ok(rule.selector.startsWith(':where('), 'rule must start with :where( to stay at specificity 0');
+  assert.match(rule.selector, /\bselect\b/);
+  assert.match(rule.selector, /\btextarea\b/);
+  assert.match(rule.selector, /\binput\b/);
+  assert.match(rule.selector, /:not\(\[type="checkbox"\]\)/);
+  assert.match(rule.selector, /:not\(\[type="radio"\]\)/);
+  assert.doesNotMatch(rule.selector.replace(/^:where\(/, ''), /^[^:]*\.[a-z]/, 'no class selectors');
+  for (const prop of ['background', 'color', 'border']) {
+    const m = rule.body.match(new RegExp('(?:^|[;\\s])' + prop + '(?:-color)?:\\s*([^;]+)'));
+    assert.ok(m, `missing ${prop}`);
+    assert.match(m[1], /var\(--o-[a-z0-9-]+\)/, `${prop} must use an --o-* token`);
+  }
+  assert.doesNotMatch(rule.body, /font-size/, 'must not contradict the 16px rule');
+  assert.equal(literalColour(rule.body), false, 'literal colour in control rule');
+  assert.match(base, /:where\(select\) option\s*\{[^}]*background:\s*var\(--o-[a-z0-9-]+\)[^}]*color:\s*var\(--o-[a-z0-9-]+\)/);
+});
+
+test('positive control: the literal-colour check catches a literal', () => {
+  assert.equal(literalColour('background: #fff;'), true);
+  assert.equal(literalColour('color: rgb(0,0,0);'), true);
+  assert.equal(literalColour('border: 1px solid white;'), true);
+  assert.equal(literalColour('background: var(--o-surface-2);'), false);
+});
