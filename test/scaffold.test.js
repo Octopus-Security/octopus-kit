@@ -15,6 +15,8 @@ const { spawn, spawnSync } = require('node:child_process');
 const KIT = path.resolve(__dirname, '..');
 const BIN = path.join(KIT, 'bin', 'create-octopus-app.mjs');
 const { validate, toHubJson } = require('../manifest/validate');
+// The tag the scaffold pins, read from the generator so a release bump does not break this test.
+const KIT_REF = /export const KIT_REF = '(v\d+\.\d+\.\d+)'/.exec(fs.readFileSync(path.join(__dirname, '..', 'bin', 'create-octopus-app.mjs'), 'utf8'))[1];
 
 let gen; // the ESM generator, loaded once
 const load = async () => gen || (gen = await import(path.join(KIT, 'bin', 'create-octopus-app.mjs')));
@@ -115,7 +117,7 @@ for (const profile of ['ui', 'headless', 'static']) {
     // package.json: the kit comes from a tarball URL (no git binary needed)
     if (node) {
       const pkg = JSON.parse(read(dir, 'package.json'));
-      assert.match(pkg.dependencies['octopus-kit'], /^https:\/\/codeload\.github\.com\/Octopus-Security\/octopus-kit\/tar\.gz\/refs\/tags\/v0\.1\.0$/);
+      assert.equal(pkg.dependencies['octopus-kit'], `https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/${KIT_REF}`);
       assert.ok(pkg.optionalDependencies['@octopus-security/auth-client'], 'auth-client is OPTIONAL');
       assert.ok(!pkg.dependencies['@octopus-security/auth-client']);
       assert.strictEqual(!!pkg.dependencies.ejs, profile === 'ui');
