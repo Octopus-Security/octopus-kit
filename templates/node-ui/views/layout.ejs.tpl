@@ -2,7 +2,7 @@
 <html lang="en" data-app="{{SLUG}}" <%- theme.htmlAttrs %><% if (theme.accentStyle) { %> style="<%= theme.accentStyle %>"<% } %>>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title><%= title ? title + ' · ' : '' %>{{NAME}}</title>
   <%- themeBoot %>
   <link rel="stylesheet" href="<%= kit('/tokens/tokens.css') %>">
@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="/public<%= asset('/app.css') %>">
 </head>
 <body>
+  <header class="o-header">
+    <a class="o-header__brand" href="/"><strong>{{NAME}}</strong></a>
+  </header>
   <%- body %>
 </body>
 </html>

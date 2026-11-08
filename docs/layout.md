@@ -188,4 +188,23 @@ The source of truth for every app in the estate. A rule changes here first; apps
 7. **`img`, `video`, `svg` are `max-width: 100%`** (`height: auto` for img and video).
 8. **16px side gutter** (`--o-space-4`) from `.o-container` / `.o-page`; do not go below it on a phone.
 9. **44px minimum tap targets** (`--o-tap`) on buttons, nav links, tabs, checks; inputs are 16px font so iOS does not zoom.
-10. **A viewport meta with `width=device-width, initial-scale=1, viewport-fit=cover`** on every page.
+10. **A viewport meta with exactly `width=device-width, initial-scale=1, viewport-fit=cover`** on every page. Never `maximum-scale`/`user-scalable=no` (blocks zoom, an accessibility failure) and never a fixed `width=1024` style value (the page starts zoomed out or offset).
+11. **Header and nav rows wrap.** Use `.o-header` (or `.o-row`): `flex-wrap: wrap`, and `min-width: 0` on its children so a long title shrinks instead of pushing the page wider. A row of links that cannot wrap goes in the drawer shell (above).
+12. **Form controls are `max-width: 100%` and 16px.** Under 16px iOS Safari zooms on focus and the page stays zoomed; `base.css` sets `font-size: max(16px, 1rem)` on `input`, `select`, `textarea`.
+13. **`img`, `video`, `svg`, `canvas`, `iframe`, `embed`, `object` are `max-width: 100%`.** Give a fixed-size embed an aspect-ratio wrapper rather than a pixel width.
+14. **Minimum supported width is 320px.** Nothing may need more. No fixed pixel widths above ~300px on a block; use `min(Npx, 100%)`, `minmax(0, 1fr)` and `flex-wrap`. Grid/flex children that hold long text need `min-width: 0`.
+
+### Checking it: the overflow checker
+
+`bin/octopus-check-overflow.mjs` loads each URL in headless Chromium at 320, 360, 390 and 412 px wide (mobile emulation, device pixel ratio 3) and fails if the page is wider than the screen.
+
+```sh
+node node_modules/octopus-kit/bin/octopus-check-overflow.mjs https://example.net/ http://localhost:3000/
+node bin/octopus-check-overflow.mjs --widths 320,390 --json <url>
+```
+
+It reports `scrollWidth > device width` per width (mobile Chromium widens the layout viewport to fit overflowing content, so `innerWidth` alone would hide it), plus the elements whose right edge passes the viewport (selector, right edge, width), and exits 1 on any overflow, 2 if the browser cannot be started. Options: `--widths a,b,c`, `--json`, `--settle <ms>` (wait after load, default 500), `--max <n>` offenders per width (default 5). It never logs in: a gated app is checked on the page it serves to an anonymous visitor. For a logged-in page, run it from your own script via `import { checkUrl } from '.../octopus-check-overflow.mjs'` and pass a Playwright page.
+
+`playwright` is an **optional** dependency of the checker, not of the kit: install it (`npm i -D playwright`, then `npx playwright install chromium`) in the app that wants the check. If it is missing, or no Chromium is installed, the script says so and exits 2 rather than reporting a pass. `PLAYWRIGHT_CHROMIUM_PATH` points it at an existing browser binary (needed when the installed Playwright expects a different Chromium revision than the one on disk).
+
+A generated app has this as `npm run check:overflow` (set `CHECK_URL` or pass a URL).

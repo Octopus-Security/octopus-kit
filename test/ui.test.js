@@ -90,3 +90,12 @@ test('layout & text rules: no grey overscroll, no mid-word breaks, tap targets',
     assert.doesNotMatch(strip(fs.readFileSync(path.join(uiDir, f), 'utf8')), /word-break:\s*break-all/, `${f}: break-all`);
   }
 });
+
+test('no sideways scroll from first load: controls, media and header rows are contained', () => {
+  const base = strip(fs.readFileSync(path.join(uiDir, 'base.css'), 'utf8'));
+  assert.match(base, /input, select, textarea \{ max-width: 100%; \}/);
+  assert.match(base, /font-size:\s*max\(16px, 1rem\)/);
+  assert.match(base, /img, svg, video, canvas, iframe[^{]*\{\s*max-width:\s*100%/);
+  assert.match(base, /\.o-header \{[^}]*flex-wrap:\s*wrap/);
+  assert.match(base, /\.o-header > \*, \.o-row > \* \{ min-width: 0; \}/);
+});
