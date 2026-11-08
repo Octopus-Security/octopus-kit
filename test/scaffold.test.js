@@ -346,3 +346,21 @@ test('scaffold allocates a real, distinct accent for a new slug and reuses a res
     assert.deepStrictEqual(reserved.accent, accents.registry.budget);
   } finally { fsx.rmSync(tmp, { recursive: true, force: true }); }
 });
+
+test('scaffold follows the mobile rules from the start: viewport, wrapping header, overflow script', async () => {
+  const { generate } = await load();
+  const VIEWPORT = 'width=device-width, initial-scale=1, viewport-fit=cover';
+  const ui = path.join(tmp('scaf-'), 'ui');
+  generate({ slug: 'demo', name: 'Demo App', profile: 'ui', dir: ui });
+  const layout = read(ui, 'views/layout.ejs');
+  assert.ok(layout.includes(`content="${VIEWPORT}"`), 'ui viewport meta');
+  assert.ok(layout.includes('/ui/base.css') && layout.includes('class="o-header"'), 'ui links base.css and has a wrapping header');
+  assert.doesNotMatch(layout, /maximum-scale|user-scalable/);
+  const pkg = JSON.parse(read(ui, 'package.json'));
+  assert.match(pkg.scripts['check:overflow'], /octopus-check-overflow/);
+  assert.ok(pkg.devDependencies.playwright, 'playwright is a devDependency of the generated app');
+  const site = path.join(tmp('scaf-'), 'site');
+  generate({ slug: 'site', name: 'Site', profile: 'static', dir: site });
+  const html = read(site, 'public/index.html');
+  assert.ok(html.includes(`content="${VIEWPORT}"`) && html.includes('class="o-header"'));
+});

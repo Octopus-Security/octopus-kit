@@ -153,9 +153,10 @@ export function generate({ slug, name, profile = 'ui', dir, icon, subdomain, dom
       description: `${name}, an app of the octopus suite`,
       private: true,
       main: 'index.js',
-      scripts: { start: 'node index.js', dev: 'AUTH_MODE=dev node --watch index.js', test: 'node --test "test/*.test.js"' },
+      scripts: { start: 'node index.js', dev: 'AUTH_MODE=dev node --watch index.js', test: 'node --test "test/*.test.js"', 'check:overflow': 'octopus-check-overflow --widths 320,360,390,412 ${CHECK_URL:-http://localhost:3000/}' },
       dependencies: { 'octopus-kit': kitDep, express: '^4.21.2', ...(profile === 'ui' ? { ejs: '^3.1.10' } : {}) },
       optionalDependencies: { '@octopus-security/auth-client': '^1.3.0' },
+      devDependencies: { playwright: '^1.40.0' },
       engines: { node: '>=20' },
     };
     write('package.json', `${JSON.stringify(pkg, null, 2)}\n`);
