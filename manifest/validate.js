@@ -27,9 +27,15 @@ const ACCESS = ['private', 'open'];
 const PROFILES = ['ui', 'headless', 'static'];
 const LEVELS = ['required', 'feature'];
 
-const TOP_KEYS = ['$schema', 'slug', 'name', 'description', 'icon', 'subdomain', 'domain', 'access', 'profile', 'provides', 'uses'];
+const TOP_KEYS = ['$schema', 'slug', 'name', 'description', 'icon', 'subdomain', 'domain', 'access', 'profile', 'provides', 'uses', 'env'];
 const PROVIDES_KEYS = ['internal', 'tools', 'widgets'];
 const USES_KEYS = ['service', 'level', 'feature', 'why'];
+// env: what the New app flow (cortex Admin -> Deploy) does with each variable the compose references.
+const ENV_KEYS = ['name', 'required', 'kind', 'description', 'howTo', 'deriveFrom', 'panel'];
+const ENV_KINDS = ['copy', 'generate', 'derive', 'manual', 'leave-empty'];
+const ENV_PANELS = ['billing', 'secrets', 'users', 'deploy'];
+const ENV_NAME_RE = /^[A-Z_][A-Z0-9_]{0,127}$/;
+const DERIVE_PLACEHOLDERS = ['slug', 'subdomain', 'domain'];
 
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const isStr = v => typeof v === 'string';
@@ -107,6 +113,38 @@ function validate(m) {
     }
   }
 
+  if (m.env !== undefined) {
+    if (!Array.isArray(m.env)) err('env must be a list');
+    else {
+      if (m.env.length > 64) err('env has more than 64 entries');
+      const names = new Set();
+      m.env.forEach((e, i) => {
+        const at = `env[${i}]`;
+        if (!isObj(e)) { err(`${at} must be an object`); return; }
+        for (const k of Object.keys(e)) if (!ENV_KEYS.includes(k)) err(`${at} has unknown key "${k}"`);
+        if (!isStr(e.name) || !ENV_NAME_RE.test(e.name)) err(`${at}.name must be an environment variable name (A-Z, 0-9, "_")`);
+        else if (names.has(e.name)) err(`${at} duplicates "${e.name}"`);
+        else names.add(e.name);
+        if (!ENV_KINDS.includes(e.kind)) err(`${at}.kind must be one of ${ENV_KINDS.join(', ')}`);
+        if (e.required !== undefined && typeof e.required !== 'boolean') err(`${at}.required must be true or false`);
+        if (e.description !== undefined && (!isStr(e.description) || !e.description.trim() || e.description.length > 300 || hasControl(e.description))) err(`${at}.description must be 1-300 characters of plain text`);
+        if (e.howTo !== undefined && (!isStr(e.howTo) || !e.howTo.trim() || e.howTo.length > 1200 || hasControl(e.howTo))) err(`${at}.howTo must be 1-1200 characters of plain text`);
+        if (e.panel !== undefined && !ENV_PANELS.includes(e.panel)) err(`${at}.panel must be one of ${ENV_PANELS.join(', ')}`);
+        if (e.kind === 'derive') {
+          if (!isStr(e.deriveFrom) || !e.deriveFrom.trim()) err(`${at}.deriveFrom is required when kind is "derive" (e.g. "https://{subdomain}.{domain}")`);
+          else {
+            if (e.deriveFrom.length > 200 || hasControl(e.deriveFrom)) err(`${at}.deriveFrom must be at most 200 characters of plain text`);
+            for (const mm of e.deriveFrom.matchAll(/\{([^}]*)\}/g)) if (!DERIVE_PLACEHOLDERS.includes(mm[1])) err(`${at}.deriveFrom: unknown placeholder {${mm[1]}} (use ${DERIVE_PLACEHOLDERS.map(x => `{${x}}`).join(', ')})`);
+          }
+        } else if (e.deriveFrom !== undefined) err(`${at}.deriveFrom only applies when kind is "derive"`);
+        if (e.kind === 'manual' && e.howTo === undefined) warnings.push(`${at} (${e.name}): a manual variable should say howTo obtain it`);
+        if (e.kind === 'manual' && e.required && e.howTo === undefined) warnings.push(`${at} (${e.name}): required and manual with no howTo leaves the admin stuck`);
+        if (e.kind === 'generate' && e.required === false) warnings.push(`${at} (${e.name}): a generated secret is always filled in; required has no effect`);
+        if (e.description === undefined) warnings.push(`${at} (${e.name}): add a one-line description`);
+      });
+    }
+  }
+
   return { ok: errors.length === 0, errors, warnings };
 }
 
@@ -147,4 +185,4 @@ function readManifest(file) {
   return { ...validate(obj), manifest: obj };
 }
 
-module.exports = { validate, fromHubJson, toHubJson, readManifest, SLUG_RE, ACCESS, PROFILES, LEVELS, TOP_KEYS };
+module.exports = { validate, fromHubJson, toHubJson, readManifest, SLUG_RE, ACCESS, PROFILES, LEVELS, TOP_KEYS, ENV_KEYS, ENV_KINDS, ENV_PANELS, ENV_NAME_RE };

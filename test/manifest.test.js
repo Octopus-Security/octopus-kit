@@ -169,3 +169,56 @@ test('readManifest reads and validates a file; bad JSON is an error result, not 
   assert.strictEqual(M.readManifest(path.join(d, 'bad.json')).ok, false);
   assert.strictEqual(M.readManifest(path.join(d, 'missing.json')).ok, false);
 });
+
+// ── env: the New app plan ────────────────────────────────────────────────────
+const withEnv = env => ({ ...good(), env });
+const okEnv = [
+  { name: 'AUTH_SERVICE_URL', required: true, kind: 'copy', description: 'Where sessions are verified.' },
+  { name: 'SESSION_SECRET', kind: 'generate', description: 'Signs cookies.' },
+  { name: 'PUBLIC_BASE_URL', kind: 'derive', deriveFrom: 'https://{subdomain}.{domain}', description: 'Public origin.' },
+  { name: 'PAYMENT_LINK', kind: 'manual', panel: 'billing', howTo: 'Admin -> Billing -> payment links.', description: 'Checkout link.' },
+  { name: 'AUTH_MODE', kind: 'leave-empty', description: 'Empty means sso.' },
+];
+
+test('env: every kind validates, and warnings stay empty for a complete section', () => {
+  const r = M.validate(withEnv(okEnv));
+  assert.deepStrictEqual(r.errors, []);
+  assert.deepStrictEqual(r.warnings, []);
+});
+
+test('env: errors name the entry — unknown key, bad name, bad kind, duplicate, bad panel', () => {
+  const e = x => errs(withEnv([{ name: 'A', kind: 'copy', ...x }]));
+  assert.ok(e({ colour: 1 }).some(m => /env\[0\] has unknown key "colour"/.test(m)));
+  assert.ok(e({ name: 'lower' }).some(m => /env\[0\]\.name/.test(m)));
+  assert.ok(e({ kind: 'invent' }).some(m => /env\[0\]\.kind must be one of copy, generate, derive, manual, leave-empty/.test(m)));
+  assert.ok(e({ required: 'yes' }).some(m => /required must be true or false/.test(m)));
+  assert.ok(e({ panel: 'nowhere' }).some(m => /panel must be one of/.test(m)));
+  assert.ok(errs(withEnv([{ name: 'A', kind: 'copy' }, { name: 'A', kind: 'copy' }])).some(m => /duplicates "A"/.test(m)));
+  assert.ok(errs({ ...good(), env: {} }).some(m => /env must be a list/.test(m)));
+  assert.ok(errs(withEnv(Array.from({ length: 65 }, (_, i) => ({ name: `V${i}`, kind: 'copy' })))).some(m => /more than 64/.test(m)));
+});
+
+test('env: derive needs a template over known placeholders; deriveFrom is refused on other kinds', () => {
+  assert.ok(errs(withEnv([{ name: 'U', kind: 'derive' }])).some(m => /deriveFrom is required/.test(m)));
+  assert.ok(errs(withEnv([{ name: 'U', kind: 'derive', deriveFrom: 'https://{host}.net' }])).some(m => /unknown placeholder \{host\}/.test(m)));
+  assert.ok(errs(withEnv([{ name: 'U', kind: 'copy', deriveFrom: 'x' }])).some(m => /only applies when kind is "derive"/.test(m)));
+  assert.deepStrictEqual(errs(withEnv([{ name: 'U', kind: 'derive', deriveFrom: 'https://{slug}.{subdomain}.{domain}' }])), []);
+});
+
+test('env: warnings for a manual variable with no howTo, a missing description, a pointless required on generate', () => {
+  const w = env => M.validate(withEnv(env)).warnings;
+  assert.ok(w([{ name: 'X', kind: 'manual', description: 'd' }]).some(m => /should say howTo/.test(m)));
+  assert.ok(w([{ name: 'X', kind: 'manual', required: true, description: 'd' }]).some(m => /leaves the admin stuck/.test(m)));
+  assert.ok(w([{ name: 'X', kind: 'copy' }]).some(m => /add a one-line description/.test(m)));
+  assert.ok(w([{ name: 'X', kind: 'generate', required: false, description: 'd' }]).some(m => /required has no effect/.test(m)));
+});
+
+test('env: the JSON schema agrees with the validator on kinds, panels, keys and the name pattern', () => {
+  const item = schema.properties.env.items;
+  assert.deepStrictEqual(item.properties.kind.enum, M.ENV_KINDS);
+  assert.deepStrictEqual(item.properties.panel.enum, M.ENV_PANELS);
+  assert.deepStrictEqual(Object.keys(item.properties).sort(), [...M.ENV_KEYS].sort());
+  assert.strictEqual(item.properties.name.pattern, M.ENV_NAME_RE.source);
+  assert.strictEqual(item.additionalProperties, false);
+  assert.strictEqual(schema.properties.env.maxItems, 64);
+});
