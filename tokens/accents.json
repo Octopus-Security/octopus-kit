@@ -310,5 +310,18 @@
    "hover": "#65508e",
    "ink": "#ffffff"
   }
+ },
+ "school": {
+  "name": "School",
+  "dark": {
+   "accent": "#e7768a",
+   "hover": "#fd8ea0",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#b54960",
+   "hover": "#9d334d",
+   "ink": "#ffffff"
+  }
  }
 }
