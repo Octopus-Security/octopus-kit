@@ -23,6 +23,13 @@ const THRESHOLDS = {
 };
 // The allocator aims a little past the minimum so a new colour is not borderline.
 const ALLOC_MARGIN = 0.4;
+// The candidate grid the allocator searches. Widened (1 degree hue steps, more lightness and
+// chroma rows) when the wheel filled at 25 apps; the thresholds above were NOT relaxed, so every
+// candidate still has to clear minDeltaE + ALLOC_MARGIN in both modes and 4.5:1 on the dark bg.
+// The old grid (2 degrees x L 0.70-0.82 x C 0.10-0.14) is a subset, so existing choices are unchanged.
+const CAND_HUE_STEP = 1;
+const CAND_L = [0.58, 0.60, 0.62, 0.64, 0.66, 0.68, 0.70, 0.72, 0.74, 0.76, 0.78, 0.80, 0.82, 0.84, 0.86, 0.88, 0.90];
+const CAND_C = [0.06, 0.075, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.155, 0.17, 0.185, 0.20];
 
 function load(file) {
   const raw = JSON.parse(fs.readFileSync(file || path.join(__dirname, 'accents.json'), 'utf8'));
@@ -81,6 +88,28 @@ function makeEntry(name, darkAccent, lightAccent) {
   return { name, dark: part(darkAccent, 'dark'), light: part(light, 'light') };
 }
 
+// The candidate grid, resolved once: out-of-gamut chroma is clamped, so several grid points can
+// land on the same hex; those are dropped (first occurrence wins, keeping the search deterministic).
+let candidateCache = null;
+function candidates() {
+  if (candidateCache) return candidateCache;
+  const seen = new Set();
+  candidateCache = [];
+  for (let h = 0; h < 360; h += CAND_HUE_STEP) {
+    for (const L of CAND_L) {
+      for (const C of CAND_C) {
+        const dark = color.oklchToHex(L, C, h);
+        if (seen.has(dark)) continue;
+        seen.add(dark);
+        if (color.contrast(dark, bg.dark) < THRESHOLDS.minTextContrast) continue;
+        const light = color.darkenToContrast(dark, bg.light, 4.6);
+        candidateCache.push({ h, dark, light, dLab: color.toOklab(dark), lLab: color.toOklab(light) });
+      }
+    }
+  }
+  return candidateCache;
+}
+
 // Pick a free colour for a new app: the candidate that is furthest from every existing accent
 // and from success/danger, in both modes. Returns { dark, light, name } or null if the wheel
 // is full (no candidate clears minDeltaE + margin). Deterministic: same input, same answer.
@@ -96,25 +125,22 @@ function nextFreeAccent(existing = registry, opts = {}) {
   used.light.push(...Object.values(semantic.light));
   const need = THRESHOLDS.minDeltaE + ALLOC_MARGIN;
 
+  // Same OKLab distance as color.deltaE, with each colour converted once rather than per pair.
+  const lab = (list) => list.map((x) => color.toOklab(x));
+  const usedLab = { dark: lab(used.dark), light: lab(used.light) };
+  const dist = (p, q) => 100 * Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
   let best = null;
-  for (let h = 0; h < 360; h += 2) {
-    for (const L of [0.7, 0.74, 0.78, 0.82]) {
-      for (const C of [0.1, 0.12, 0.14]) {
-        const dark = color.oklchToHex(L, C, h);
-        if (color.contrast(dark, bg.dark) < THRESHOLDS.minTextContrast) continue;
-        const light = color.darkenToContrast(dark, bg.light, 4.6);
-        let m = Infinity;
-        for (const x of used.dark) m = Math.min(m, color.deltaE(dark, x));
-        for (const x of used.light) m = Math.min(m, color.deltaE(light, x));
-        if (m < need) continue;
-        let score = m;
-        if (opts.hue !== undefined) {
-          const dh = Math.abs(((h - opts.hue + 540) % 360) - 180);
-          score = -dh * 1000 + m; // nearest hue first, then furthest from the rest
-        }
-        if (!best || score > best.score) best = { score, dark, light };
-      }
+  for (const { h, dark, light, dLab, lLab } of candidates()) {
+    let m = Infinity;
+    for (const x of usedLab.dark) m = Math.min(m, dist(dLab, x));
+    for (const x of usedLab.light) m = Math.min(m, dist(lLab, x));
+    if (m < need) continue;
+    let score = m;
+    if (opts.hue !== undefined) {
+      const dh = Math.abs(((h - opts.hue + 540) % 360) - 180);
+      score = -dh * 1000 + m; // nearest hue first, then furthest from the rest
     }
+    if (!best || score > best.score) best = { score, dark, light };
   }
   if (!best) return null;
   return makeEntry(opts.name || '', best.dark, best.light);
