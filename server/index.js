@@ -17,6 +17,8 @@ const llm = require('./llm');
 const layout = require('./layout');
 const prefs = require('./prefs');
 const kitAssets = require('./kit-assets');
+const sqlite = require('./sqlite');
+const staticAssets = require('./static');
 const brand = require('../brand');
 
 const api = {
@@ -32,6 +34,10 @@ const api = {
   prefs,
   kitAssets: kitAssets.kitAssets,
   brand,
+  sqlitePragmas: sqlite.sqlitePragmas,
+  createUserDbCache: sqlite.createUserDbCache,
+  staticOptions: staticAssets.staticOptions,
+  warnIfNotProduction: staticAssets.warnIfNotProduction,
   modules: {
     resolve: layout.resolveModules, normalise: layout.normaliseModulePrefs,
     isEnabled: layout.isModuleEnabled, gate: layout.moduleGate,
