@@ -5,9 +5,16 @@
   "description": "Supersedes hub.json. `uses[].level` is the same vocabulary as `requires[].level` in octopus-template.json. validate.js is the executable form of this schema and adds the cross-field rules a schema cannot (feature required when level is 'feature', unique uses entries).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["slug", "name", "subdomain", "profile"],
+  "required": [
+    "slug",
+    "name",
+    "subdomain",
+    "profile"
+  ],
   "properties": {
-    "$schema": { "type": "string" },
+    "$schema": {
+      "type": "string"
+    },
     "slug": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
@@ -15,20 +22,79 @@
       "maxLength": 40,
       "description": "Permanent identifier. Never renamed: it keys the app's accent, its access rows in octopus-auth and its place in the hub."
     },
-    "name": { "type": "string", "minLength": 1, "maxLength": 60, "description": "Display name." },
-    "description": { "type": "string", "maxLength": 300 },
-    "icon": { "type": "string", "minLength": 1, "maxLength": 16, "description": "One emoji, shown on the hub tile." },
-    "subdomain": { "type": "string", "pattern": "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$", "description": "Left-most DNS label." },
-    "domain": { "type": "string", "pattern": "^[a-z0-9]([a-z0-9.-]{0,251}[a-z0-9])?$", "description": "Parent domain. Optional: the hub tooling supplies its own default." },
-    "access": { "enum": ["private", "open"], "default": "private", "description": "private: hidden from everyone but admins until granted. open: visible to every account on release." },
-    "profile": { "enum": ["ui", "headless", "static"] },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60,
+      "description": "Display name."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "icon": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 16,
+      "description": "One emoji, shown on the hub tile."
+    },
+    "subdomain": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$",
+      "description": "Left-most DNS label."
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9.-]{0,251}[a-z0-9])?$",
+      "description": "Parent domain. Optional: the hub tooling supplies its own default."
+    },
+    "access": {
+      "enum": [
+        "private",
+        "open"
+      ],
+      "default": "private",
+      "description": "private: hidden from everyone but admins until granted. open: visible to every account on release."
+    },
+    "profile": {
+      "enum": [
+        "ui",
+        "headless",
+        "static"
+      ]
+    },
     "provides": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "internal": { "type": "array", "maxItems": 100, "items": { "type": "string", "pattern": "^/[A-Za-z0-9/_.:-]*$", "maxLength": 200 }, "description": "Paths of service-to-service endpoints (behind the internal secret)." },
-        "tools": { "type": "array", "maxItems": 100, "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$" }, "description": "Tool names cortex may offer for this app." },
-        "widgets": { "type": "array", "maxItems": 50, "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$" }, "description": "Reserved." }
+        "internal": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "pattern": "^/[A-Za-z0-9/_.:-]*$",
+            "maxLength": 200
+          },
+          "description": "Paths of service-to-service endpoints (behind the internal secret)."
+        },
+        "tools": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,63}$"
+          },
+          "description": "Tool names cortex may offer for this app."
+        },
+        "widgets": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+          },
+          "description": "Reserved."
+        }
       }
     },
     "uses": {
@@ -37,12 +103,90 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["service", "level"],
+        "required": [
+          "service",
+          "level"
+        ],
         "properties": {
-          "service": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,62}$" },
-          "level": { "enum": ["required", "feature"] },
-          "feature": { "type": "string", "minLength": 1, "maxLength": 80, "description": "Name of the feature that breaks without it. Required when level is 'feature'." },
-          "why": { "type": "string", "minLength": 1, "maxLength": 200, "description": "What it is for, in plain text." }
+          "service": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,62}$"
+          },
+          "level": {
+            "enum": [
+              "required",
+              "feature"
+            ]
+          },
+          "feature": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "Name of the feature that breaks without it. Required when level is 'feature'."
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "What it is for, in plain text."
+          }
+        }
+      }
+    },
+    "env": {
+      "type": "array",
+      "maxItems": 64,
+      "description": "What the New app flow does with each variable the compose references. kind: copy (other stacks hold it; copied inside the deployer), generate (a new secret this app owns, made by ops at creation), derive (computed from deriveFrom, e.g. https://{subdomain}.{domain}), manual (an external value nobody holds; howTo says how to get it), leave-empty (a dangerous local default, or the app default is right). Unlisted variables are classified from .env.example comments, then by name.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "kind"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Z_][A-Z0-9_]{0,127}$"
+          },
+          "required": {
+            "type": "boolean",
+            "default": false
+          },
+          "kind": {
+            "enum": [
+              "copy",
+              "generate",
+              "derive",
+              "manual",
+              "leave-empty"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "howTo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200,
+            "description": "Step-by-step instructions for a manual variable."
+          },
+          "deriveFrom": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Template for kind derive. Placeholders: {slug}, {subdomain}, {domain}."
+          },
+          "panel": {
+            "enum": [
+              "billing",
+              "secrets",
+              "users",
+              "deploy"
+            ],
+            "description": "The cortex Admin panel that creates this value, linked from the form."
+          }
         }
       }
     }

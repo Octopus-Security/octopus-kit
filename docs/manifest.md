@@ -22,6 +22,7 @@ reads `hub.json`; scaffolded apps write both).
 | `profile` | required: `ui`, `headless`, `static` |
 | `provides.internal` | paths starting `/`; `provides.tools` snake_case names; `provides.widgets` reserved. A static app cannot provide internal endpoints. |
 | `uses[]` | `{ service, level: required|feature, feature, why }`. Same vocabulary as `requires` in `octopus-template.json`. `feature` is required when `level` is `feature`; `why` <= 200 chars; no duplicates; not itself. |
+| `env[]` | `{ name, required, kind, description, howTo, deriveFrom, panel }`, <= 64. Tells the New app flow in cortex Admin what to do with each variable the compose references. `kind`: `copy` (other stacks hold it), `generate` (a new secret this app owns; ops makes it, nobody sees it), `derive` (computed: `deriveFrom` is a template over `{slug}`, `{subdomain}`, `{domain}`), `manual` (external value; `howTo` says how to get it, `panel` links the cortex panel that creates it: billing, secrets, users, deploy), `leave-empty` (dangerous local default, or the app default is right). `deriveFrom` only with `derive`. Variables not listed are classified from `.env.example` comments (`# @kind generate`, `# @howto ...`, `# @required`), then by name. |
 
 Unknown keys are errors at every level, so a typo like `levle` cannot quietly turn a hard dependency into none.
 
