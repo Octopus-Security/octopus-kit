@@ -23,9 +23,9 @@ every env var `${VAR:-}`, health and `/api/build` ahead of auth, the app gate af
 The generated `package.json` uses the **codeload tarball URL**:
 
 ```
-"octopus-kit": "https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/v0.5.0"
+"octopus-kit": "https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/v0.6.0"
 ```
-not `github:Octopus-Security/octopus-kit#v0.5.0`. npm resolves a `github:` spec with the `git` binary; `node:22-alpine` has none
+not `github:Octopus-Security/octopus-kit#v0.6.0`. npm resolves a `github:` spec with the `git` binary; `node:22-alpine` has none
 (`npm error enoent spawn git`, verified 2026-10-12). The tarball form installs with no git and no token. The tag must exist
 before the first image build.
 
