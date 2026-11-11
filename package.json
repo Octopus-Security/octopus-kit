@@ -40,6 +40,6 @@
   },
   "devDependencies": {
     "sequelize": "^6.37.0",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^6.0.1"
   }
 }
