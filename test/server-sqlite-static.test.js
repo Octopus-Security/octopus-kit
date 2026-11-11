@@ -10,13 +10,21 @@ test('pragma SQL: wal on, and wal off keeps only busy_timeout', () => {
   assert.strictEqual(pragmaSql({ wal: false, busyMs: 100 }), 'PRAGMA busy_timeout=100;');
 });
 
-test('sqlitePragmas runs on every connection through afterConnect', async () => {
-  let hook; const ran = [];
-  const seq = { addHook: (n, f) => { assert.strictEqual(n, 'afterConnect'); hook = f; } };
-  sqlitePragmas(seq);
-  for (let i = 0; i < 2; i++) await hook({ exec: (sql, cb) => { ran.push(sql); cb(null); } });
-  assert.strictEqual(ran.length, 2);
-  await assert.rejects(hook({ exec: (s, cb) => cb(new Error('x')) }), /x/);
+test('real sqlite: pragmas apply to plain and transaction connections', async (t) => {
+  let Sequelize;
+  try { ({ Sequelize } = require('sequelize')); require('sqlite3'); } catch { return t.skip('sequelize/sqlite3 not installed'); }
+  const dir = require('node:fs').mkdtempSync(require('node:path').join(require('node:os').tmpdir(), 'kit-wal-'));
+  const seq = new Sequelize({ dialect: 'sqlite', storage: dir + '/t.db', logging: false });
+  sqlitePragmas(seq, { busyMs: 1234 });
+  const q = async (sql, tx) => (await seq.query(sql, { type: 'SELECT', transaction: tx }))[0];
+  assert.strictEqual((await q('PRAGMA journal_mode')).journal_mode, 'wal');
+  assert.strictEqual((await q('PRAGMA busy_timeout')).timeout, 1234);
+  assert.strictEqual((await q('PRAGMA synchronous')).synchronous, 1);
+  await seq.transaction(async (tx) => {
+    assert.strictEqual((await q('PRAGMA journal_mode', tx)).journal_mode, 'wal');
+    assert.strictEqual((await q('PRAGMA busy_timeout', tx)).timeout, 1234);
+  });
+  await seq.close();
 });
 
 const mk = () => { const closed = []; return { closed, factory: (k) => ({ k, close: async () => { closed.push(k); } }) }; };

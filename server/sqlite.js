@@ -16,19 +16,28 @@ function pragmaSql({ wal = true, busyMs = 5000 } = {}) {
 }
 
 /**
- * Installs the pragmas through Sequelize's `afterConnect` hook, which fires for each
- * connection the pool opens. Running them once after authenticate() is not enough:
- * busy_timeout and synchronous are per-connection, and a pool (or a handle opened per
- * transaction) would get the defaults. WAL needs the database in a DIRECTORY that is
- * mounted as a volume (it creates -wal and -shm beside it); on a single-file bind
- * mount pass `wal: false`, which sets only busy_timeout.
+ * Installs the pragmas on every connection the sqlite dialect hands out. Sequelize's sqlite
+ * connection manager never fires the `afterConnect` hook (verified: it overrides getConnection
+ * and skips the base class's connect path), so this wraps getConnection and tunes each new
+ * handle once, tracked in a WeakSet. That covers the default connection AND the separate
+ * per-transaction handles. busy_timeout and synchronous are per connection; journal_mode=WAL
+ * persists in the file. WAL writes -wal and -shm beside the database, so it must sit in a
+ * mounted directory; on a single-file bind mount pass `wal: false`.
  * Returns the SQL it will run. Call before the first query.
  */
 function sqlitePragmas(sequelize, opts = {}) {
   const sql = pragmaSql(opts);
-  sequelize.addHook('afterConnect', (connection) => new Promise((resolve, reject) => {
-    connection.exec(sql, (err) => (err ? reject(err) : resolve()));
-  }));
+  const cm = sequelize.connectionManager;
+  const orig = cm.getConnection.bind(cm);
+  const tuned = new WeakSet();
+  cm.getConnection = async function withPragmas(options) {
+    const connection = await orig(options);
+    if (!tuned.has(connection)) {
+      tuned.add(connection);
+      await new Promise((resolve, reject) => connection.exec(sql, (err) => (err ? reject(err) : resolve())));
+    }
+    return connection;
+  };
   return sql;
 }
 

@@ -173,8 +173,8 @@ app.use(express.static(dir, staticOptions()));
 warnIfNotProduction();                    // once, at startup
 ```
 
-`sqlitePragmas` registers a Sequelize `afterConnect` hook, so `journal_mode=WAL`, `busy_timeout` (default 5000 ms)
-and `synchronous=NORMAL` apply to every connection the pool opens, not just the first. WAL writes `-wal` and `-shm` files
+`sqlitePragmas` wraps the dialect's `getConnection` (Sequelize never fires `afterConnect` for sqlite) and tunes each new handle once, including per-transaction handles, so `journal_mode=WAL`, `busy_timeout` (default 5000 ms)
+and `synchronous=NORMAL` apply to every connection it hands out. WAL writes `-wal` and `-shm` files
 beside the database, so the database must sit in a mounted directory; on a single-file bind mount use `{ wal: false }`
 (only `busy_timeout` is set).
 
