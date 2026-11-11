@@ -159,3 +159,28 @@ require('octopus-kit/server/testing').envWiringTest({ root: __dirname + '/..', r
 module, an absolute path outside the repo). `listen: true` also starts it for real and waits for `/health`.
 `envWiringTest` fails on any `process.env.X` / `env.X` the code reads that the compose never passes.
 Lower-level: `checkBoots`, `startServer`, `checkEnvWiring`.
+
+## SQLite and static assets
+
+```js
+const { sqlitePragmas, createUserDbCache, staticOptions, warnIfNotProduction } = require('octopus-kit/server');
+
+sqlitePragmas(sequelize);                 // before the first query; { wal: false } on a single-file mount
+const dbs = createUserDbCache((user) => openUserDb(user), { max: 200 });
+await dbs.use(validatedUsername, (db) => db.models.Entry.findAll());   // never closed mid-request
+
+app.use(express.static(dir, staticOptions()));
+warnIfNotProduction();                    // once, at startup
+```
+
+`sqlitePragmas` registers a Sequelize `afterConnect` hook, so `journal_mode=WAL`, `busy_timeout` (default 5000 ms)
+and `synchronous=NORMAL` apply to every connection the pool opens, not just the first. WAL writes `-wal` and `-shm` files
+beside the database, so the database must sit in a mounted directory; on a single-file bind mount use `{ wal: false }`
+(only `busy_timeout` is set).
+
+`createUserDbCache` is an LRU keyed by a key the caller has ALREADY validated; it does no sanitising. Evicted
+instances are closed (`close()` or `sequelize.close()`) only once no `use`/`acquire` still holds them. Pair every
+`acquire` with its `release`.
+
+`staticOptions` sends `immutable, max-age=1y` only for requests carrying `?v=` or a hashed filename, and a 60 s
+revalidation otherwise. Use it only where references are stamped.
