@@ -6,6 +6,8 @@
  *     (the package is CommonJS, so bundlers and Node read the `exports.x` lines below as named exports,
  *      and `import oDialog from ...` gives the whole object)
  *   - require()                         -> the same object
+ * ui/dialog.mjs is GENERATED from this file (npm run build:dialog); a test fails if they differ.
+ * Bundlers (Vite/Rollup/Next) should import dialog.mjs: Rollup's CJS interop cannot see named exports here.
  * Styling: ui/dialog.css. Docs: docs/dialog.md.
  */
 (function (root, factory) {
@@ -18,7 +20,7 @@
     exports.toast = api.toast;
   }
   if (typeof window !== 'undefined') window.oDialog = api;
-})(typeof window !== 'undefined' ? window : this, function (root) {
+})(typeof window !== 'undefined' ? window : this, /*impl:start*/ function (root) {
   'use strict';
 
   var doc = typeof document !== 'undefined' ? document : null;
@@ -277,4 +279,4 @@
     toast: toast,
     _test: { esc: esc }
   };
-});
+} /*impl:end*/);

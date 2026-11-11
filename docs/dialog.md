@@ -26,7 +26,7 @@ oDialog.toast(message, { kind = 'info', timeout = 4000 })   // void, non-blockin
 
 ## Loading it
 
-Plain EJS / vanilla page (serve both files from `node_modules/octopus-kit/ui/` at a content-versioned URL):
+Plain EJS / vanilla page, using `dialog.js` (serve both files from `node_modules/octopus-kit/ui/` at a content-versioned URL):
 
 ```html
 <link rel="stylesheet" href="/kit/dialog.css?v=<%= stamp %>">
@@ -40,11 +40,11 @@ Plain EJS / vanilla page (serve both files from `node_modules/octopus-kit/ui/` a
 </script>
 ```
 
-React / Vite / Next (the package is CommonJS: bundlers read the named exports; the default import is the whole object):
+React / Vite / Next: import from **`dialog.mjs`**, a real ES module with named exports and a default export. (`dialog.js` is the classic-script/CommonJS build; Rollup's CJS interop does not see its named exports, so do not import it from a bundler.) `dialog.mjs` is generated from `dialog.js` by `npm run build:dialog`, and a test fails if they differ.
 
 ```js
 import 'octopus-kit/ui/dialog.css';                       // once, at the root
-import { confirm, toast } from 'octopus-kit/ui/dialog.js';
+import { confirm, toast } from 'octopus-kit/ui/dialog.mjs';
 
 async function onDelete() {
   if (!(await confirm({ title: 'Delete?', danger: true, confirmLabel: 'Delete' }))) return;

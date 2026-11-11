@@ -20,6 +20,7 @@
   ],
   "scripts": {
     "test": "node --test",
+    "build:dialog": "node scripts/build-dialog.mjs",
     "build:tokens": "node scripts/build-tokens.mjs",
     "check:tokens": "node scripts/build-tokens.mjs --check",
     "build:channel": "node scripts/build-channel.mjs --check",

@@ -226,3 +226,32 @@ test('browser: Esc, Enter, focus return, queueing, typeToConfirm, escaping, toas
     assert.deepEqual(errors, []);
   } finally { await browser.close(); }
 });
+
+// ---- ES module build ----------------------------------------------------------------
+test('ui/dialog.mjs is up to date with ui/dialog.js and has real named exports', async () => {
+  const r = spawnSync(process.execPath, [path.join(root, 'scripts/build-dialog.mjs'), '--check']);
+  assert.equal(r.status, 0, String(r.stderr));
+  const m = await import(path.join(root, 'ui/dialog.mjs'));
+  for (const k of ['alert', 'confirm', 'prompt', 'toast']) assert.equal(typeof m[k], 'function', k);
+  assert.equal(m.default.confirm, m.confirm);
+  assert.equal(await m.confirm('x'), false);
+});
+
+const viteDir = ['octopus-code', 'octopus-ecom', 'octopus-math', 'octopus-planner']
+  .map((r) => path.join(root, '..', r, 'node_modules', 'vite')).find((d) => fs.existsSync(path.join(d, 'package.json')));
+test('a real Vite production build resolves the named exports from octopus-kit/ui/dialog.mjs', { skip: !viteDir && 'no vite in a sibling repo' }, async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vitedlg-'));
+  fs.mkdirSync(path.join(dir, 'node_modules'));
+  fs.symlinkSync(root, path.join(dir, 'node_modules', 'octopus-kit'), 'dir');
+  fs.writeFileSync(path.join(dir, 'main.js'), "import { alert, confirm, prompt, toast } from 'octopus-kit/ui/dialog.mjs';\nglobalThis.__x = [alert, confirm, prompt, toast].length;\n");
+  fs.writeFileSync(path.join(dir, 'index.html'), '<script type="module" src="/main.js"></script>');
+  const script = path.join(os.tmpdir(), `vb-${process.pid}.mjs`);
+  fs.writeFileSync(script, `import { build } from ${JSON.stringify(path.join(viteDir, 'dist/node/index.js'))};
+await build({ root: ${JSON.stringify(dir)}, logLevel: 'error', configFile: false, build: { outDir: 'out', minify: false } });`);
+  const r = spawnSync(process.execPath, [script], { encoding: 'utf8' });
+  fs.unlinkSync(script);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const outs = fs.readdirSync(path.join(dir, 'out/assets')).filter((f) => f.endsWith('.js'));
+  assert.ok(outs.length >= 1);
+  assert.match(fs.readFileSync(path.join(dir, 'out/assets', outs[0]), 'utf8'), /o-dialog/);
+});
