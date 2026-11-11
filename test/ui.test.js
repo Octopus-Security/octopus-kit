@@ -7,6 +7,8 @@ const path = require('node:path');
 const root = path.join(__dirname, '..');
 const uiDir = path.join(root, 'ui');
 const files = fs.readdirSync(uiDir).filter((f) => f.endsWith('.css'));
+// dialog.css carries literal fallbacks and app-var fallbacks by design (apps without kit tokens); test/dialog.test.js polices it.
+const tokenOnly = files.filter((f) => f !== 'dialog.css');
 const tokensCss = fs.readFileSync(path.join(root, 'tokens/tokens.css'), 'utf8');
 const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -16,7 +18,7 @@ test('ui css files exist', () => {
 
 test('no raw colour literals in ui/*.css (hex, rgb(a), hsl(a), named colours)', () => {
   const named = /(?<![\w-])(white|black|red|green|blue|yellow|orange|purple|pink|gray|grey|cyan|magenta|teal|navy)(?![\w-])\s*[;,)}]/i;
-  for (const f of files) {
+  for (const f of tokenOnly) {
     const css = strip(fs.readFileSync(path.join(uiDir, f), 'utf8'));
     assert.doesNotMatch(css, /#[0-9a-fA-F]{3,8}\b/, `${f}: hex literal`);
     assert.doesNotMatch(css, /\b(rgb|rgba|hsl|hsla|hwb|oklch|oklab|lab|lch)\(/i, `${f}: colour function`);
@@ -26,7 +28,7 @@ test('no raw colour literals in ui/*.css (hex, rgb(a), hsl(a), named colours)', 
 
 test('every --o-* token the ui uses is defined by tokens.css', () => {
   const defined = new Set([...tokensCss.matchAll(/--o-([a-z0-9-]+):/g)].map((m) => m[1]));
-  for (const f of files) {
+  for (const f of tokenOnly) {
     const css = fs.readFileSync(path.join(uiDir, f), 'utf8');
     for (const m of css.matchAll(/var\(--o-([a-z0-9-]+)/g)) {
       assert.ok(defined.has(m[1]), `${f} uses undefined --o-${m[1]}`);
@@ -35,7 +37,7 @@ test('every --o-* token the ui uses is defined by tokens.css', () => {
 });
 
 test('ui uses no non-kit custom properties', () => {
-  for (const f of files) {
+  for (const f of tokenOnly) {
     const css = fs.readFileSync(path.join(uiDir, f), 'utf8');
     for (const m of css.matchAll(/var\(--(?!o-)([a-z0-9-]+)/g)) assert.fail(`${f} uses var(--${m[1]})`);
   }

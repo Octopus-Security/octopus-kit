@@ -12,7 +12,7 @@ Delivery is a hybrid (see `docs/delivery.md`):
   codeload tarball (no git binary, no registry token):
 
 ```json
-"octopus-kit": "https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/v0.5.0"
+"octopus-kit": "https://codeload.github.com/Octopus-Security/octopus-kit/tar.gz/refs/tags/v0.6.0"
 ```
 
 Not `github:Octopus-Security/octopus-kit#...`: npm resolves that with `git`, which `node:alpine`
