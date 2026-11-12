@@ -323,5 +323,18 @@
    "hover": "#9d334d",
    "ink": "#ffffff"
   }
+ },
+ "coach": {
+  "name": "Coach",
+  "dark": {
+   "accent": "#e56fe3",
+   "hover": "#fd86fb",
+   "ink": "#0b0d10"
+  },
+  "light": {
+   "accent": "#b13cb0",
+   "hover": "#9a229a",
+   "ink": "#ffffff"
+  }
  }
 }

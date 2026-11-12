@@ -28,7 +28,8 @@
   "bin": {
     "create-octopus-app": "bin/create-octopus-app.mjs",
     "octopus-favicon-pack": "bin/octopus-favicon-pack.mjs",
-    "octopus-check-overflow": "bin/octopus-check-overflow.mjs"
+    "octopus-check-overflow": "bin/octopus-check-overflow.mjs",
+    "octopus-check-layout": "bin/octopus-check-layout.mjs"
   },
   "peerDependencies": {
     "playwright": ">=1.40"
