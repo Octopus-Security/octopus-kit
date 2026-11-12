@@ -184,3 +184,21 @@ instances are closed (`close()` or `sequelize.close()`) only once no `use`/`acqu
 
 `staticOptions` sends `immutable, max-age=1y` only for requests carrying `?v=` or a hashed filename, and a 60 s
 revalidation otherwise. Use it only where references are stamped.
+
+## Safeguards (health and client data)
+
+`secureHeaders`, `idleTimeout`, `safeError`, `auditLine` (`server/safeguards.js`): the mechanical
+half of the HIPAA technical safeguards, for any app holding a person's health or client data. The map,
+status per app and what these do NOT do are in `octopus-vault/compliance/HIPAA.md`.
+
+```js
+app.use(kit.secureHeaders({ noStore: true }));          // before any route
+app.use(identify);                                       // sets req.user
+app.use(kit.idleTimeout({ idleMs: 15 * 60 * 1000, secret: process.env.IDLE_SECRET,
+  onExpire: (req, res) => res.redirect('/logout') }));   // automatic logoff
+console.error(kit.safeError(err));                       // never err.message for client data
+```
+
+The CSP it sends only locks down framing, `<base>`, forms and `<object>`; it deliberately sets no
+`script-src`, so an inline theme-boot tag still runs. Apps that can afford a strict script policy add
+their own. Apps that pin the kit by tag copy this file until a tag contains it.

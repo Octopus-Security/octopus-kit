@@ -19,6 +19,7 @@ const prefs = require('./prefs');
 const kitAssets = require('./kit-assets');
 const sqlite = require('./sqlite');
 const staticAssets = require('./static');
+const safeguards = require('./safeguards');
 const brand = require('../brand');
 
 const api = {
@@ -34,6 +35,10 @@ const api = {
   prefs,
   kitAssets: kitAssets.kitAssets,
   brand,
+  secureHeaders: safeguards.secureHeaders,
+  idleTimeout: safeguards.idleTimeout,
+  safeError: safeguards.safeError,
+  auditLine: safeguards.auditLine,
   sqlitePragmas: sqlite.sqlitePragmas,
   createUserDbCache: sqlite.createUserDbCache,
   staticOptions: staticAssets.staticOptions,
