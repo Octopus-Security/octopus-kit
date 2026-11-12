@@ -111,9 +111,11 @@ export function checkCss(text, file, { findings, summary }) {
     }
     if (/white-space\s*:\s*nowrap/.test(b.body) && /(^|[\s,>])(p|li|td|dd|span|a|label|h[1-6]|\.[\w-]*(name|title|desc|text|meta|detail|label|msg)[\w-]*)\s*($|[,:.\s{>])/i.test(b.sel) && !/text-overflow\s*:\s*ellipsis/.test(b.body))
       add('nowrap', off('white-space'), b.sel.split('\n')[0].slice(0, 60));
-    if (/(^|[\s,>])(input|select|textarea)\b/.test(b.sel) && !/type=["']?(checkbox|radio|range|color|file)/.test(b.sel)) {
+    if (/(^|[\s,>])(input|select|textarea)\b/.test(b.sel.replace(/:not\([^)]*\)/g, '')) && !/type=["']?(checkbox|radio|range|color|file)/.test(b.sel.replace(/:not\([^)]*\)/g, ''))) {
       const f = b.body.match(/(?<![\w-])font-size\s*:\s*(\d+(?:\.\d+)?)(px|rem|em)/);
-      if (f && (f[2] === 'px' ? +f[1] : +f[1] * 16) < 16) add('input-font', off(f[0]), `${b.sel.split('\n')[0].slice(0, 50)}: ${f[0]}`);
+      const px = f && (f[2] === 'px' ? +f[1] : +f[1] * 16);
+      if (f && px >= 16 && (b.inMedia || /!important/.test(b.body))) summary.input16 = true;
+      if (f && px < 16) add('input-font', off(f[0]), `${b.sel.split('\n')[0].slice(0, 50)}: ${f[0]}`);
     }
     // project-level signals
     const s = b.sel.replace(/\s+/g, ' ');
@@ -126,12 +128,12 @@ export function checkCss(text, file, { findings, summary }) {
   if (/100dvh/.test(t)) summary.dvh = true;
 }
 
-export function checkTemplate(text, file, { findings }) {
+export function checkTemplate(text, file, { findings, summary = {} }) {
   const add = (rule, idx, extra = '') => findings.push({ file, line: lineOf(text, idx), rule, severity: RULES[rule][0], message: RULES[rule][1] + (extra ? ` [${extra}]` : '') });
   for (const m of text.matchAll(/<meta\b[^>]*name\s*=\s*["']viewport["'][^>]*>/gi)) {
     const tag = m[0];
     const c = (tag.match(/content\s*=\s*["']([^"']*)["']/i) || [])[1] || '';
-    const norm = c.split(',').map((x) => x.trim().replace(/\s*=\s*/, '=').replace(/^initial-scale=1\.0+$/, 'initial-scale=1')).filter(Boolean).sort().join(',');
+    const norm = c.split(',').map((x) => x.trim().replace(/\s*=\s*/, '=').replace(/^initial-scale=1\.0+$/, 'initial-scale=1')).filter((x) => Boolean(x) && !x.startsWith('interactive-widget=')).sort().join(',');
     if (/maximum-scale|user-scalable\s*=\s*(no|0)/i.test(c) || /width\s*=\s*\d+/.test(c)) add('viewport-zoom', m.index, c);
     else if (norm !== 'initial-scale=1,viewport-fit=cover,width=device-width') add('viewport-cover', m.index, c);
   }
@@ -139,7 +141,7 @@ export function checkTemplate(text, file, { findings }) {
   for (const sm of text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
     const pad = text.slice(0, sm.index + sm[0].indexOf(sm[1])).replace(/[^\n]/g, '');
     const sub = pad + sm[1];
-    checkCss(sub, file, { findings, summary: {} });
+    checkCss(sub, file, { findings, summary });
   }
 }
 
@@ -151,13 +153,15 @@ export function checkDir(dir) {
     else if (TPL_EXT.has(ext)) {
       let t; try { t = fs.readFileSync(f, 'utf8'); } catch { continue; }
       stats.templates++; if (/name\s*=\s*["']viewport["']/i.test(t)) stats.viewportPages++;
-      checkTemplate(t, rel, { findings });
+      checkTemplate(t, rel, { findings, summary });
       for (const sm of t.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) checkCss(sm[1], rel, { findings: [], summary }); // signals only
     }
   }
   // Project-level: only meaningful when the app has CSS at all, and not satisfied by linking the kit's base.css.
   const kit = (() => { try { return /octopus-kit|\/kit\/ui\/base\.css|\/v0\/base\.css/.test(fs.readFileSync(path.join(dir, 'package.json'), 'utf8')) || walk(dir).some((f) => TPL_EXT.has(path.extname(f)) && /\/(kit|v0)\/(ui\/)?base\.css/.test(fs.readFileSync(f, 'utf8'))); } catch { return false; } })();
   summary.kit = kit;
+  // A phone-only (or !important) 16px rule for inputs overrides the smaller sizes the same sheets set elsewhere.
+  if (summary.input16) for (let i = findings.length - 1; i >= 0; i--) if (findings[i].rule === 'input-font') findings.splice(i, 1);
   if (stats.css + stats.templates > 0 && !kit) {
     const P = (rule, ok) => { if (!ok) findings.push({ file: '(project)', line: 0, rule, severity: RULES[rule][0], message: RULES[rule][1] }); };
     P('p-body-clip', summary.bodyClip); P('p-html-bg', summary.htmlBg); P('p-wrap', summary.wrap);

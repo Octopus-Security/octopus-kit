@@ -67,3 +67,11 @@ test('project-level base rules are missing -> warnings, none of which fail the r
 test('inline <style> in a template is scanned', () => {
   assert.ok(scan({ 'v.ejs': `${GOOD_HEAD}<style>.x{word-break:break-all}</style>`, 'a.css': KIT_ISH }).rules.includes('break-all'));
 });
+
+test('a phone-only or !important 16px input rule clears the smaller sizes; interactive-widget in the viewport is allowed', () => {
+  const small = KIT_ISH + 'input{font-size:14px}.q input{font-size:13px}';
+  assert.ok(scan({ 'a.css': small }).rules.includes('input-font'));
+  const fixed = small + '@media (max-width:640px){input:not([type="checkbox"]), select, textarea{font-size:16px !important}}';
+  assert.ok(!scan({ 'a.css': fixed }).rules.includes('input-font'));
+  assert.equal(scan({ 'a.css': KIT_ISH, 'v.html': '<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content, viewport-fit=cover">' }).rules.length, 0);
+});
