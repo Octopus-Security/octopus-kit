@@ -132,6 +132,7 @@ export function checkTemplate(text, file, { findings, summary = {} }) {
   const add = (rule, idx, extra = '') => findings.push({ file, line: lineOf(text, idx), rule, severity: RULES[rule][0], message: RULES[rule][1] + (extra ? ` [${extra}]` : '') });
   for (const m of text.matchAll(/<meta\b[^>]*name\s*=\s*["']viewport["'][^>]*>/gi)) {
     const tag = m[0];
+    if (new RegExp('layout-ok:[^>]*\\b(viewport-cover|viewport-zoom)\\b').test(text.slice(Math.max(0, m.index - 200), m.index))) continue;
     const c = (tag.match(/content\s*=\s*["']([^"']*)["']/i) || [])[1] || '';
     const norm = c.split(',').map((x) => x.trim().replace(/\s*=\s*/, '=').replace(/^initial-scale=1\.0+$/, 'initial-scale=1')).filter((x) => Boolean(x) && !x.startsWith('interactive-widget=')).sort().join(',');
     if (/maximum-scale|user-scalable\s*=\s*(no|0)/i.test(c) || /width\s*=\s*\d+/.test(c)) add('viewport-zoom', m.index, c);
