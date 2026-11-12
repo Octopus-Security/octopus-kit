@@ -5,6 +5,7 @@
 [data-app="blog"] { --o-accent: #ffa4cf; --o-accent-hover: #ffcae1; --o-accent-ink: #0b0d10; } /* Blog */
 [data-app="budget"] { --o-accent: #42aa65; --o-accent-hover: #5ac07a; --o-accent-ink: #0b0d10; } /* Budget */
 [data-app="business"] { --o-accent: #9fa9b8; --o-accent-hover: #b5bfce; --o-accent-ink: #0b0d10; } /* Business */
+[data-app="coach"] { --o-accent: #e56fe3; --o-accent-hover: #fd86fb; --o-accent-ink: #0b0d10; } /* Coach */
 [data-app="code"] { --o-accent: #35c2b0; --o-accent-hover: #53d9c6; --o-accent-ink: #0b0d10; } /* Code */
 [data-app="cortex"] { --o-accent: #c96442; --o-accent-hover: #e17a57; --o-accent-ink: #0b0d10; } /* Cortex */
 [data-app="dash"] { --o-accent: #9d8ff7; --o-accent-hover: #b3aafd; --o-accent-ink: #0b0d10; } /* Dash */
@@ -32,6 +33,7 @@
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="blog"] { --o-accent: #a2567c; --o-accent-hover: #8c4268; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="budget"] { --o-accent: #237626; --o-accent-hover: #01610d; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="business"] { --o-accent: #5c6372; --o-accent-hover: #49505e; --o-accent-ink: #ffffff; }
+  :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="coach"] { --o-accent: #b13cb0; --o-accent-hover: #9a229a; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="code"] { --o-accent: #0b7363; --o-accent-hover: #005d50; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="cortex"] { --o-accent: #ac5442; --o-accent-hover: #953f2e; --o-accent-ink: #ffffff; }
   :root:not([data-theme="dark"]):not([data-theme="light"])[data-app="dash"] { --o-accent: #7f54d6; --o-accent-hover: #6b3dbe; --o-accent-ink: #ffffff; }
@@ -59,6 +61,7 @@
 [data-theme="light"][data-app="blog"] { --o-accent: #a2567c; --o-accent-hover: #8c4268; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="budget"] { --o-accent: #237626; --o-accent-hover: #01610d; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="business"] { --o-accent: #5c6372; --o-accent-hover: #49505e; --o-accent-ink: #ffffff; }
+[data-theme="light"][data-app="coach"] { --o-accent: #b13cb0; --o-accent-hover: #9a229a; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="code"] { --o-accent: #0b7363; --o-accent-hover: #005d50; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="cortex"] { --o-accent: #ac5442; --o-accent-hover: #953f2e; --o-accent-ink: #ffffff; }
 [data-theme="light"][data-app="dash"] { --o-accent: #7f54d6; --o-accent-hover: #6b3dbe; --o-accent-ink: #ffffff; }
