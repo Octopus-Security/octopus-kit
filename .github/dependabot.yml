@@ -1,0 +1,31 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      npm-minor-patch:
+        update-types: ["minor", "patch"]
+    ignore:
+      - dependency-name: "express"
+        update-types: ["version-update:semver-major"]
+      # private package: Dependabot has no registry credentials for it
+      - dependency-name: "@octopus-security/*"
+  - package-ecosystem: docker
+    directory: "/channel"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      docker-minor-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      github-actions-minor-patch:
+        update-types: ["minor", "patch"]
