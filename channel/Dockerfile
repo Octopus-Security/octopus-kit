@@ -4,7 +4,7 @@
 
 # Stage 1: build and validate the static channel from the checked-out tag. A file that does not
 # parse fails the build, so Portainer keeps the previous container running.
-FROM node:22-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /kit
 COPY package.json ./
 COPY tokens ./tokens
